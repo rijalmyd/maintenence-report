@@ -334,7 +334,10 @@ Authorization: Bearer {{token}}
   "asset_image_url": "https://localhost:3000",
   "repair_image_urls": ["https://localhost:3000","https://localhost:3000","https://localhost:3000"],
   "km_asset": 1000,
-  "sparepart_ids": ["{{sparepartID1}}", "{{sparepartID2}}"],
+  "spareparts": [
+    {"id":"{{sparepartID1}}", "quantity": 1},
+    {"id":"{{sparepartID2}}", "quantity": 2}
+  ],
   "complaint": "complaint saja",
   "repair_plan": "repair saja"
 }

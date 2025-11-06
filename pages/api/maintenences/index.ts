@@ -113,26 +113,26 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         const laborCost = 0;
         let sparepartCost = 0;
 
-        // get sparepart
-        const sparepart = await prisma.sparepart.findMany({
-          where: {
-            id: {
-              in: body.sparepart_ids,
-            },
-          },
-        });
+        await Promise.all(
+          body.spareparts.map(async (sparepartInput) => {
+            // get sparepart
+            const sparepart = await prisma.sparepart.findUnique({
+              where: {
+                id: sparepartInput.id,
+              },
+            });
 
-        console.log(sparepart);
+            if (!sparepart) {
+              return res.status(400).json(fail("sparepart not found"));
+            }
 
-        if (!sparepart || sparepart.length !== body.sparepart_ids.length) {
-          return res.status(400).json(fail("sparepart not found"));
-        }
+            const totalPrice = sparepart.price * sparepartInput.quantity;
 
-        sparepart.map((sparepart) => {
-          sparepartCost += sparepart.price;
-        });
+            sparepartCost += totalPrice;
+          })
+        );
 
-        const totalCost = laborCost + sparepartCost;
+        const totalCost = sparepartCost + laborCost;
 
         const createImages = await Promise.all(
           body.repair_image_urls.map((url) =>
@@ -162,9 +162,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
         // Hubungkan spareparts yang sudah ada
         await prisma.maintenenceSparepart.createMany({
-          data: body.sparepart_ids.map((id) => ({
+          data: body.spareparts.map((sparepart) => ({
             maintenence_id: maintenence.id,
-            sparepart_id: id,
+            sparepart_id: sparepart.id,
           })),
         });
 
