@@ -32,29 +32,31 @@ enum ChassisType {
 }
 
 model User {
-  id        String   @id @default(uuid()) @db.Uuid
-  fullname  String
-  username  String   @unique
-  password  String
-  role      Role     @default(USER)
-  createdAt DateTime @default(now())
+  id           String        @id @default(uuid()) @db.Uuid
+  fullname     String
+  username     String        @unique
+  password     String
+  role         Role          @default(USER)
+  createdAt    DateTime      @default(now())
+  maintenences Maintenence[]
 
   @@map("users")
 }
 
 model Driver {
-  id            String  @id @default(uuid()) @db.Uuid
+  id            String        @id @default(uuid()) @db.Uuid
   driver_number String
   name          String
   phone         String
   notes         String?
   is_active     Boolean
+  maintenences  Maintenence[]
 
   @@map("drivers")
 }
 
 model Asset {
-  id             String      @id @default(uuid()) @db.Uuid
+  id             String        @id @default(uuid()) @db.Uuid
   asset_code     String
   name           String
   asset_type     AssetType
@@ -64,9 +66,10 @@ model Asset {
   purchase_date  DateTime?
   purchase_price Int?
   is_active      Boolean
-  Vehicle        Vehicle[]
-  Chassis        Chassis[]
-  Equipment      Equipment[]
+  vehicle        Vehicle?
+  chassis        Chassis?
+  equipment      Equipment?
+  maintenences   Maintenence[]
 
   @@map("assets")
 }
@@ -82,7 +85,7 @@ model Vehicle {
   kir_due_date  DateTime?
   stnk_due_date DateTime?
   notes         String?
-  asset_id      String    @db.Uuid
+  asset_id      String    @unique @db.Uuid
   asset         Asset     @relation(fields: [asset_id], references: [id])
 
   @@map("vehicles")
@@ -97,7 +100,7 @@ model Chassis {
   no_kir           String?
   kir_due_date     DateTime?
   notes            String?
-  asset_id         String      @db.Uuid
+  asset_id         String      @unique @db.Uuid
   asset            Asset       @relation(fields: [asset_id], references: [id])
 
   @@map("chassises")
@@ -109,20 +112,74 @@ model Equipment {
   equipment_type String
   specification  String
   condition      String
-  asset_id       String @db.Uuid
+  asset_id       String @unique @db.Uuid
   asset          Asset  @relation(fields: [asset_id], references: [id])
 
   @@map("equipments")
 }
 
 model Sparepart {
-  id             String @id @default(uuid()) @db.Uuid
-  code           String
-  name           String
-  unit           String
-  price          Int
-  stock_quantity Int
-  description    String
+  id                    String                 @id @default(uuid()) @db.Uuid
+  code                  String
+  name                  String
+  unit                  String
+  price                 Int
+  stock_quantity        Int
+  description           String
+  maintenenceSpareparts MaintenenceSparepart[]
 
   @@map("spareparts")
+}
+
+model Maintenence {
+  id              String                 @id @default(uuid()) @db.Uuid
+  record_number   String
+  user_id         String                 @db.Uuid
+  user            User                   @relation(fields: [user_id], references: [id])
+  complaint       String
+  repair_notes    String
+  driver_id       String                 @db.Uuid
+  driver          Driver                 @relation(fields: [driver_id], references: [id])
+  asset_id        String                 @db.Uuid
+  asset           Asset                  @relation(fields: [asset_id], references: [id])
+  km_asset        Int
+  total_cost      Int
+  labor_cost      Int
+  spareparts_cost Int
+  asset_image_url String
+  spareparts      MaintenenceSparepart[]
+  images          MaintenenceImage[]
+
+  @@map("maintenences")
+}
+
+model Image {
+  id           String             @id @default(uuid()) @db.Uuid
+  url          String
+  alt          String?
+  maintenences MaintenenceImage[]
+
+  @@map("images")
+}
+
+model MaintenenceImage {
+  id             String      @id @default(uuid()) @db.Uuid
+  maintenence_id String      @db.Uuid
+  image_id       String      @db.Uuid
+  maintenence    Maintenence @relation(fields: [maintenence_id], references: [id])
+  image          Image       @relation(fields: [image_id], references: [id])
+
+  @@unique([maintenence_id, image_id])
+  @@map("maintenence_images")
+}
+
+model MaintenenceSparepart {
+  id             String      @id @default(uuid()) @db.Uuid
+  maintenence_id String      @db.Uuid
+  sparepart_id   String      @db.Uuid
+  maintenence    Maintenence @relation(fields: [maintenence_id], references: [id])
+  sparepart      Sparepart   @relation(fields: [sparepart_id], references: [id])
+
+  @@unique([maintenence_id, sparepart_id])
+  @@map("maintenence_spareparts")
 }

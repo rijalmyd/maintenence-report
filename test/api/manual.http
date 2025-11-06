@@ -1,10 +1,12 @@
 @baseUrl = http://localhost:3000
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUwMzYxZDY5LWEzYmQtNDFlMy05NGI1LTlkOGNjOWRkNzg2MyIsInVzZXJuYW1lIjoicmlmYWkiLCJpYXQiOjE3NjIzMTAxMzcsImV4cCI6MTc2MjM5NjUzN30.tf_9ZqOXvrdi6WePchMJa5ZO8Zm_-W5HC6d6mUMEWPM
-@driverID=648c8f7e-7616-4d3a-9d43-513121fae73a
-@vehicleID=ee8648c9-1121-4765-a6b6-260e9458d621
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjNkMDFjMWJkLWJkNTQtNGJjMi04ZDI2LWUxODZjNWRlMGY2MyIsInVzZXJuYW1lIjoicmlmYWkiLCJpYXQiOjE3NjI0MjcwOTcsImV4cCI6MTc2MjUxMzQ5N30.a2xaFc2nsRGckA5kWQ-jaQ6sHmjAOoZd8h2HiZm99RU
+@driverID=60a38562-2a9b-4fe9-ae78-badc6be410f5
+@vehicleID=1983350b-8844-4ce1-ac7a-d4fe417dc80e
 @chassisID=1359ed55-b3e1-4f3a-bd78-7f68472514b4
 @equipementID=7198ea19-32f1-4fd1-b961-98560c9faca5
-@sparepartID=42235bda-8bf4-4340-81fe-57a5f53f340a
+@sparepartID1=f7fc9120-9289-42ed-bf3b-ff59f1c0cb79
+@sparepartID2=800f38ae-511b-4c8b-bcfa-ab05e0d5f171
+@assetID=8a2dcf01-96ff-41c0-92d1-aabe3cfa4255
 
 
 ### Register User
@@ -281,7 +283,7 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 {
-  "code": "SPR-01",
+  "code": "SPR-033",
   "name": "Apa",
   "unit": "pcs",
   "price":2000000,
@@ -296,13 +298,13 @@ Content-Type: application/json
 Authorization: Bearer {{token}}
 
 ### Get Sparepart By Id
-GET {{baseUrl}}/api/spareparts/{{sparepartID}}
+GET {{baseUrl}}/api/spareparts/{{sparepartID1}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
 
 ### Update Sparepart
-PATCH {{baseUrl}}/api/spareparts/{{sparepartID}}
+PATCH {{baseUrl}}/api/spareparts/{{sparepartID1}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
@@ -316,6 +318,28 @@ Authorization: Bearer {{token}}
 }
 
 ### Deleta Sparepart
-DELETE {{baseUrl}}/api/spareparts/{{sparepartID}}
+DELETE {{baseUrl}}/api/spareparts/{{sparepartID1}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+### Create Maintenence
+POST {{baseUrl}}/api/maintenences
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "asset_id": "{{assetID}}",
+  "driver_id": "{{driverID}}",
+  "asset_image_url": "https://localhost:3000",
+  "repair_image_urls": ["https://localhost:3000","https://localhost:3000","https://localhost:3000"],
+  "km_asset": 1000,
+  "sparepart_ids": ["{{sparepartID1}}", "{{sparepartID2}}"],
+  "complaint": "complaint saja",
+  "repair_plan": "repair saja"
+}
+
+### Get All Maintenence
+GET {{baseUrl}}/api/maintenences?size=5&page=3
 Content-Type: application/json
 Authorization: Bearer {{token}}
