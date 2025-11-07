@@ -7,6 +7,7 @@
 @sparepartID1=f7fc9120-9289-42ed-bf3b-ff59f1c0cb79
 @sparepartID2=800f38ae-511b-4c8b-bcfa-ab05e0d5f171
 @assetID=8a2dcf01-96ff-41c0-92d1-aabe3cfa4255
+@maintenenceID=00118981-31fb-42b6-a031-cabf9485eea3
 
 
 ### Register User
@@ -344,5 +345,15 @@ Authorization: Bearer {{token}}
 
 ### Get All Maintenence
 GET {{baseUrl}}/api/maintenences?size=5&page=3
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Get Curren Maintenence
+GET {{baseUrl}}/api/maintenences/me
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### Get Maintenence By Id
+GET {{baseUrl}}/api/maintenences/{{maintenenceID}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
