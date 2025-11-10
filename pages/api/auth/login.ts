@@ -1,7 +1,6 @@
-import { success } from "@/lib/apiResponse";
+import { fail, success } from "@/lib/apiResponse";
 import prisma from "@/lib/prisma";
 import { LoginUserSchema } from "@/schema/userSchema";
-import { fail } from "assert";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -32,7 +31,7 @@ export default async function handler(
       { expiresIn: "1d" }
     );
 
-    res.status(200).json(
+    return res.status(200).json(
       success(
         {
           user,
@@ -49,6 +48,6 @@ export default async function handler(
         errors: error.flatten().fieldErrors,
       });
     }
-    res.status(500).json(fail("terjadi kesalahan server"));
+    return res.status(500).json(fail("terjadi kesalahan server"));
   }
 }

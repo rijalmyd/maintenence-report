@@ -1,5 +1,5 @@
-@baseUrl = http://localhost:3003
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk2MDkxMjI3LTkwODAtNDdhYi1hYzdmLTZhODM4Mzg5ODVjNyIsInVzZXJuYW1lIjoicmlmYWkiLCJpYXQiOjE3NjI1OTk3ODcsImV4cCI6MTc2MjY4NjE4N30.vjpwk6IOM0z4OcCa_poHs35cS9nJtGyDPj__8EpWQEk
+@baseUrl = http://103.127.133.201:3003
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA4MzI0NWE5LTE3NzEtNGU4MS05ODAxLTA1MmU1MjMyMGFiZSIsInVzZXJuYW1lIjoicmlmYWkiLCJpYXQiOjE3NjI2NjUwMzgsImV4cCI6MTc2Mjc1MTQzOH0.k7tSzmJmnasWP0MQjASHHSW6049ynT4fSEm_NPM4EBc
 @driverID=60a38562-2a9b-4fe9-ae78-badc6be410f5
 @vehicleID=1983350b-8844-4ce1-ac7a-d4fe417dc80e
 @chassisID=1359ed55-b3e1-4f3a-bd78-7f68472514b4
@@ -348,7 +348,7 @@ GET {{baseUrl}}/api/maintenences?size=5&page=3
 Content-Type: application/json
 Authorization: Bearer {{token}}
 
-### Get Curren Maintenence
+### Get Current Maintenence
 GET {{baseUrl}}/api/maintenences/me
 Content-Type: application/json
 Authorization: Bearer {{token}}
@@ -357,3 +357,15 @@ Authorization: Bearer {{token}}
 GET {{baseUrl}}/api/maintenences/{{maintenenceID}}
 Content-Type: application/json
 Authorization: Bearer {{token}}
+
+
+### Upload File
+POST {{baseUrl}}/api/upload
+Content-Type: multipart/form-data
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; file="sample.jpg"
+Content-Type: image/jpeg
+
+< ./sample.jpg
+--WebAppBoundary--

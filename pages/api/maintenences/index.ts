@@ -110,6 +110,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         const laborCost = 0;
         let sparepartCost = 0;
 
+        // find driver
+        const driver = await prisma.driver.findUnique({
+          where: {
+            id: body.driver_id,
+          },
+        });
+
+        if (!driver) {
+          return res.status(400).json(fail("driver not found"));
+        }
+
+        // find sparepart
         await Promise.all(
           body.spareparts.map(async (sparepartInput) => {
             // get sparepart
@@ -152,7 +164,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             spareparts_cost: sparepartCost,
             total_cost: totalCost,
             asset_id: body.asset_id,
-            driver_id: body.driver_id,
+            driver_id: driver.id,
             user_id: decoded.id,
           },
         });

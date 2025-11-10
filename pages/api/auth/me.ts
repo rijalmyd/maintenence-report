@@ -36,8 +36,8 @@ export default async function handler(
 
     if (!user) return res.status(404).json(fail("user not found"));
 
-    res.status(200).json(success(user));
+    return res.status(200).json(success(user));
   } catch (error: any) {
-    res.status(401).json(fail("invalid or expired token", error));
+    return res.status(401).json(fail("invalid or expired token", error));
   }
 }
