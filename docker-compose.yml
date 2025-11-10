@@ -9,7 +9,7 @@ services:
       JWT_SECRET: supersecretkey # ubah jadi rahasia sendiri
       BASE_URL: http://localhost:3000
     volumes:
-      - ./public/uploads:/app/public/uploads
+      - ./storage/uploads:/app/storage/uploads
     depends_on:
       - mysql
     networks:
