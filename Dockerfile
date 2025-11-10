@@ -1,5 +1,5 @@
 # Dockerfile
-FROM node:20-bullseye
+FROM node:22-bullseye
 
 # Set working directory
 WORKDIR /app
