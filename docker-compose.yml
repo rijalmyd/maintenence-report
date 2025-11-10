@@ -14,7 +14,7 @@ services:
       - app-network # ⬅️ Tambahkan network
 
   mysql:
-    image: mysql:8.0 # ✅ Versi stabil & kompatibel untuk CPU lama
+    image: mysql:8.0.36 # ✅ Versi stabil & kompatibel untuk CPU lama
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
