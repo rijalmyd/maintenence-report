@@ -2,6 +2,7 @@ import { useCreateUser } from "@/hooks/useUser";
 import { RegisterUserSchema } from "@/schema/userSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Select } from "@radix-ui/react-select";
+import { Loader2Icon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { Button } from "../ui/button";
@@ -102,10 +103,14 @@ const UserForm: React.FC = () => {
             />
           </FieldSet>
           <Field orientation="horizontal">
-            <Button type="submit">Submit</Button>
-            {/* <Button variant="outline" type="button">
-              Cancel
-            </Button> */}
+            {userMutation.isPending ? (
+              <Button type="button" disabled>
+                <Loader2Icon className="animate-spin" />
+                Save
+              </Button>
+            ) : (
+              <Button type="submit">Submit</Button>
+            )}
           </Field>
         </FieldGroup>
       </form>

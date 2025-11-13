@@ -1,3 +1,4 @@
+import { User } from "@/generated/prisma/client";
 import api from "@/lib/fetcher";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -6,9 +7,12 @@ import { useEffect } from "react";
 export const useAuthGuard = () => {
   const router = useRouter();
 
-  const { data, isError, isLoading } = useQuery({
+  const { data, isError, isLoading } = useQuery<User>({
     queryKey: ["me"],
-    queryFn: () => api.get("/auth/me"),
+    queryFn: async () => {
+      const res = await api.get("/auth/me");
+      return res.data.data;
+    },
     retry: false,
   });
 
@@ -24,7 +28,10 @@ export const useIsLoggin = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["me"],
-    queryFn: () => api.get("/auth/me"),
+    queryFn: async () => {
+      const res = await api.get("/auth/me");
+      return res.data.data;
+    },
     retry: false,
   });
 

@@ -113,7 +113,10 @@ const AdminLayout: React.FC<{
                   className="flex items-center gap-2 px-3 py-2 hover:bg-gray-100 rounded-lg transition-colors"
                 >
                   <div className="w-8 h-8 bg-linear-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold text-sm">
-                    JD
+                    {user?.fullname
+                      .split(" ")
+                      .map((word) => word.charAt(0).toUpperCase())
+                      .join("") ?? "MR"}
                   </div>
                   <ChevronDown className="w-4 h-4 text-gray-600 hidden sm:block" />
                 </button>
@@ -208,7 +211,10 @@ const AdminLayout: React.FC<{
             {menuItems.find((item) => item.to === pathname)?.label}
           </h2>
           <p className="text-gray-600 mt-1">
-            Welcome back! Heres whats happening today.
+            {user
+              ? `Selamat datang kembali ${user?.fullname}! Semoga harimu menyenangkan
+            :)`
+              : "...."}
           </p>
         </div>
         <Toaster richColors position="top-center" />

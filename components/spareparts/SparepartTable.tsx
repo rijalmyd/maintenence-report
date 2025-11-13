@@ -1,5 +1,5 @@
-import { User } from "@/generated/prisma/client";
-import { useGetAllUser } from "@/hooks/useUser";
+import { Sparepart } from "@/generated/prisma/client";
+import { useGetAllSparepart } from "@/hooks/useSparepart";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -35,7 +35,7 @@ import {
   TableRow,
 } from "../ui/table";
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<Sparepart>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -64,33 +64,47 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => <div className="capitalize">{row.index + 1}</div>,
   },
   {
-    accessorKey: "fullname",
-    header: "Fullname",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("fullname")}</div>
-    ),
+    accessorKey: "code",
+    header: "Kode Sparepart",
+    cell: ({ row }) => <div className="capitalize">{row.getValue("code")}</div>,
   },
   {
-    accessorKey: "username",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Username
+          Nama
           <ArrowUpDown />
         </Button>
       );
     },
+    cell: ({ row }) => <div className="lowercase">{row.getValue("name")}</div>,
+  },
+  {
+    accessorKey: "price",
+    header: "Harga",
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("username")}</div>
+      <div className="capitalize">Rp. {row.getValue("price")}</div>
     ),
   },
   {
-    accessorKey: "role",
-    header: "Role",
-    cell: ({ row }) => <div className="capitalize">{row.getValue("role")}</div>,
+    accessorKey: "stock_quantity",
+    header: "Stok",
+    cell: ({ row }) => (
+      <div className="capitalize">
+        {row.getValue("stock_quantity")} {row.getValue("unit")}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "description",
+    header: "Deskripsi",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("description")}</div>
+    ),
   },
   {
     id: "actions",
@@ -122,8 +136,8 @@ export const columns: ColumnDef<User>[] = [
   },
 ];
 
-const UserTable: React.FC = () => {
-  const user = useGetAllUser();
+const SparepartTable: React.FC = () => {
+  const spareparts = useGetAllSparepart();
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -134,7 +148,7 @@ const UserTable: React.FC = () => {
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
-    data: user.data ?? [],
+    data: spareparts.data ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -269,4 +283,4 @@ const UserTable: React.FC = () => {
   );
 };
 
-export default UserTable;
+export default SparepartTable;
