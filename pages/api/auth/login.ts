@@ -25,10 +25,13 @@ export default async function handler(
     const valid = await bcrypt.compare(body.password, user.password);
     if (!valid) return res.status(401).json(fail("invalid credential"));
 
+    const jwtOptions: jwt.SignOptions =
+      body.role === "ADMIN" ? { expiresIn: "30m" } : {};
+
     const token = jwt.sign(
       { id: user.id, username: user.username },
-      process.env.JWT_SECRET as string
-      // { expiresIn: "1d" }
+      process.env.JWT_SECRET as string,
+      jwtOptions
     );
 
     return res.status(200).json(
