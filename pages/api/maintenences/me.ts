@@ -66,7 +66,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       skip,
       take,
       include: {
-        asset: true,
+        asset: {
+          include: {
+            chassis: true,
+            equipment: true,
+            vehicle: true,
+          },
+        },
         driver: true,
         images: {
           include: {
@@ -87,7 +93,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const formatted = maintenences.map((m) => ({
       ...m,
       images: m.images?.map((pivot) => pivot.image), // ambil langsung objek image-nya
-      spareparts: m.spareparts?.map((pivot) => pivot.sparepart),
+      // spareparts: m.spareparts?.map((pivot) => pivot.sparepart),
     }));
 
     return res.status(200).json({

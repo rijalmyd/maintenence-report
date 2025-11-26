@@ -144,11 +144,11 @@ model Maintenence {
   user            User                   @relation(fields: [user_id], references: [id])
   complaint       String
   repair_notes    String
-  driver_id       String                 @db.Char(36)
-  driver          Driver                 @relation(fields: [driver_id], references: [id])
+  driver_id       String?                @db.Char(36)
+  driver          Driver?                @relation(fields: [driver_id], references: [id])
   asset_id        String                 @db.Char(36)
   asset           Asset                  @relation(fields: [asset_id], references: [id])
-  km_asset        Int
+  km_asset        Int?
   total_cost      Int
   labor_cost      Int
   spareparts_cost Int

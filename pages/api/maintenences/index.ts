@@ -94,7 +94,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           skip,
           take,
           include: {
-            asset: true,
+            asset: {
+              include: {
+                chassis: true,
+                equipment: true,
+                vehicle: true,
+              },
+            },
             driver: true,
             images: {
               include: {
@@ -149,15 +155,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         let sparepartCost = 0;
 
         // find driver
-        const driver = await prisma.driver.findUnique({
-          where: {
-            id: body.driver_id,
-          },
-        });
+        const driver = body.driver_id
+          ? await prisma.driver.findUnique({
+              where: {
+                id: body.driver_id,
+              },
+            })
+          : null;
 
-        if (!driver) {
-          return res.status(400).json(fail("driver not found"));
-        }
+        // if (!driver) {
+        //   return res.status(400).json(fail("driver not found"));
+        // }
 
         // find sparepart
         await Promise.all(
@@ -202,7 +210,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
             spareparts_cost: sparepartCost,
             total_cost: totalCost,
             asset_id: body.asset_id,
-            driver_id: driver.id,
+            driver_id: driver?.id ?? null,
             user_id: decoded.id,
           },
         });

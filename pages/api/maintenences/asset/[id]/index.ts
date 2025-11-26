@@ -97,7 +97,13 @@ export default async function handler(
           skip,
           take,
           include: {
-            asset: true,
+            asset: {
+              include: {
+                chassis: true,
+                equipment: true,
+                vehicle: true,
+              },
+            },
             driver: true,
             images: {
               include: {

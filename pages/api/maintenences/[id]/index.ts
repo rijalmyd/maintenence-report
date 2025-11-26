@@ -90,7 +90,13 @@ async function findById(id?: string) {
   return prisma.maintenence.findUnique({
     where: { id },
     include: {
-      asset: true,
+      asset: {
+        include: {
+          chassis: true,
+          equipment: true,
+          vehicle: true,
+        },
+      },
       driver: true,
       images: {
         include: {
