@@ -11,11 +11,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  // Connection URLs are no longer supported in schema files.
-  // Move your database connection URL to prisma.config.ts and pass an adapter to the PrismaClient constructor
-  // or provide accelerateUrl for Accelerate. See:
-  // https://pris.ly/d/config-datasource
-  // https://pris.ly/d/prisma7-client-config
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
