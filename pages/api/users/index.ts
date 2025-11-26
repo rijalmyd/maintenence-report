@@ -7,7 +7,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method === "GET") {
-    const users = await prisma.user.findMany();
+    const users = await prisma.user.findMany({
+      orderBy: { createdAt: "desc" },
+    });
     res.status(200).json(success(users));
   }
 }

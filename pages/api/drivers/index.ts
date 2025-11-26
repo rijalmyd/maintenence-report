@@ -37,7 +37,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === "GET") {
     try {
-      const drivers = await prisma.driver.findMany();
+      const drivers = await prisma.driver.findMany({
+        orderBy: { createdAt: "desc" },
+      });
 
       res.status(200).json(success(drivers));
     } catch (error: any) {

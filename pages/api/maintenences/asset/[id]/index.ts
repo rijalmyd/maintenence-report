@@ -111,6 +111,7 @@ export default async function handler(
             },
             user: true,
           },
+          orderBy: { createdAt: "desc" },
         });
 
         // transform data agar images tidak berisi pivot

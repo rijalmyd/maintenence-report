@@ -61,6 +61,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         include: {
           asset: true,
         },
+        orderBy: { createdAt: "desc" },
       });
 
       res.status(200).json(success(drivers));

@@ -10,7 +10,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     switch (req.method) {
       case "GET": {
-        const spareparts = await prisma.sparepart.findMany();
+        const spareparts = await prisma.sparepart.findMany({
+          orderBy: { createdAt: "desc" },
+        });
         return res.status(200).json(success(spareparts));
       }
       case "POST": {

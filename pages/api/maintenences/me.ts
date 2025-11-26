@@ -80,6 +80,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         },
         user: true,
       },
+      orderBy: { createdAt: "desc" },
     });
 
     // transform data agar images tidak berisi pivot
