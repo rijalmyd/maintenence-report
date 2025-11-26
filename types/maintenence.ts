@@ -1,5 +1,10 @@
-import { Sparepart } from "@/generated/prisma/browser";
-import { Asset, Driver, Image, User } from "@/generated/prisma/client";
+import {
+  Asset,
+  Driver,
+  Image,
+  MaintenenceSparepart,
+  User,
+} from "@/generated/prisma/client";
 
 export type Maintenence = {
   id: string;
@@ -17,6 +22,7 @@ export type Maintenence = {
   asset: Asset;
   driver: Driver;
   images: Image[];
-  spareparts: Sparepart[];
+  spareparts: MaintenenceSparepart[];
   user: User;
+  createdAt: Date;
 };
