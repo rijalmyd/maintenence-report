@@ -1,3 +1,4 @@
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -20,7 +21,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Prisma } from "@/generated/prisma/browser";
-import { useGetAllChassis } from "@/hooks/useChassis";
+import { useDeleteChassis, useGetAllChassis } from "@/hooks/useChassis";
+import { useDeleteVehicle } from "@/hooks/useVehicle";
 
 import { formatDateID } from "@/lib/formatDate";
 import {
@@ -35,7 +37,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { ChevronDown, MoreHorizontal, Trash2 } from "lucide-react";
 import React from "react";
 
 type ChassisWithAsset = Prisma.ChassisGetPayload<{
@@ -113,27 +115,13 @@ export const columns: ColumnDef<ChassisWithAsset>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      const chassis = row.original;
+       return (
+        <div className="flex justify-end gap-2">
+          {/* <ViewVehicle vehicle={vehicle} />
+          <EditVehicle vehicle={vehicle} /> */}
+          <DeleteChassis chassisId={chassis.id} />
+        </div>
       );
     },
   },
@@ -283,6 +271,48 @@ const ChassisTable: React.FC = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+
+const DeleteChassis = ({ chassisId }: { chassisId: string }) => {
+  const [open, setOpen] = React.useState(false);
+  const deleteChassis = useDeleteChassis();
+
+  const handleDelete = async () => {
+    try {
+      await deleteChassis.mutateAsync(chassisId);
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button size="icon" variant="destructive">
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </AlertDialogTrigger>
+
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete the
+            chassis.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleDelete}>
+            Delete
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

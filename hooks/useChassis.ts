@@ -43,3 +43,20 @@ export const useCreateChassis = () => {
     },
   });
 };
+
+export const useDeleteChassis = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (chassisId: string) => {
+      const res = await api.delete(`/chassises/${chassisId}`);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["chassises"] });
+      toast.success("Chassis deleted successfully");
+    },
+    onError: () => {
+      toast.error("Failed to delete Chassis");
+    },
+  });
+};

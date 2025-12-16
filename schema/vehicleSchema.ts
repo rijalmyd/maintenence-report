@@ -59,13 +59,14 @@ export const UpdateVehicleSchema = z.object({
   engine_number: z.string().optional(),
   frame_number: z.string().optional(),
   no_kir: z.string().optional(),
+  is_active: z.boolean().optional(),
   kir_due_date: z.preprocess(
     (val) =>
       typeof val === "string" || val instanceof Date
         ? new Date(val)
         : undefined,
     z.date()
-  ),
+  ).optional(),
   stnk_due_date: z
     .preprocess(
       (val) =>

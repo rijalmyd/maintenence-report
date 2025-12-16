@@ -21,7 +21,6 @@ const DriverForm: React.FC = () => {
   const form = useForm<z.infer<typeof CreateDriverSchema>>({
     resolver: zodResolver(CreateDriverSchema),
     defaultValues: {
-      driver_number: "",
       name: "",
       phone: "",
       notes: "",
@@ -40,19 +39,6 @@ const DriverForm: React.FC = () => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <FieldGroup>
           <FieldSet>
-            <FormField
-              control={form.control}
-              name="driver_number"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Driver Number</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Driver Number" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="name"

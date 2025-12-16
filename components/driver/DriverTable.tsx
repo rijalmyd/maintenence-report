@@ -1,5 +1,5 @@
 import { Driver } from "@/generated/prisma/client";
-import { useGetAllDriver } from "@/hooks/useDriver";
+import { useDeleteDriver, useGetAllDriver } from "@/hooks/useDriver";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -12,7 +12,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, MoreHorizontal, Trash2 } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
@@ -34,6 +34,9 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
+import DriverEditDialog from "./DriverEditForm";
+import { Badge } from "../ui/badge";
 
 export const columns: ColumnDef<Driver>[] = [
   {
@@ -83,7 +86,7 @@ export const columns: ColumnDef<Driver>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("name")}</div>,
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
 
   {
@@ -92,6 +95,21 @@ export const columns: ColumnDef<Driver>[] = [
     cell: ({ row }) => (
       <div className="capitalize">{row.getValue("phone")}</div>
     ),
+  },
+  {
+    accessorKey: "asset.status",
+    header: "Status",
+    cell: ({ row }) => {
+      return (
+        <div className="capitalize">
+          {row.original.is_active ? (
+            <Badge>Aktif</Badge>
+          ) : (
+            <Badge variant="destructive">Tidak Aktif</Badge>
+          )}
+        </div>
+      );
+    },
   },
   {
     accessorKey: "notes",
@@ -104,27 +122,13 @@ export const columns: ColumnDef<Driver>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const driver = row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex justify-end gap-2">
+          {/* <ViewVehicle vehicle={vehicle} /> */}
+          <DriverEditDialog driver={driver} />
+          <DeleteDriver driverId={driver.id} />
+        </div>
       );
     },
   },
@@ -274,6 +278,47 @@ const DriverTable: React.FC = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const DeleteDriver = ({ driverId }: { driverId: string }) => {
+  const [open, setOpen] = React.useState(false);
+  const deleteDriver = useDeleteDriver();
+
+  const handleDelete = async () => {
+    try {
+      await deleteDriver.mutateAsync(driverId);
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button size="icon" variant="destructive">
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </AlertDialogTrigger>
+
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete the
+            driver.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleDelete}>
+            Delete
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 

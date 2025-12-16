@@ -68,7 +68,7 @@ const VehicleForm: React.FC<Props> = ({ asset, onPrevius }) => {
             <FormItem>
               <FormLabel>Warna</FormLabel>
               <FormControl>
-                <Input placeholder="contoh: AST-XXX" {...field} />
+                <Input placeholder="contoh: Merah, Hitam, dll." {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -82,7 +82,7 @@ const VehicleForm: React.FC<Props> = ({ asset, onPrevius }) => {
             <FormItem>
               <FormLabel>Nomor Mesin</FormLabel>
               <FormControl>
-                <Input placeholder="contoh: AST-XXX" {...field} />
+                <Input placeholder="contoh: MHF8983939" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -94,9 +94,9 @@ const VehicleForm: React.FC<Props> = ({ asset, onPrevius }) => {
           name="frame_number"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Nomer Frame</FormLabel>
+              <FormLabel>Nomor Rangka</FormLabel>
               <FormControl>
-                <Input placeholder="contoh: AST-XXX" {...field} />
+                <Input placeholder="contoh: FRM8373883" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -111,7 +111,7 @@ const VehicleForm: React.FC<Props> = ({ asset, onPrevius }) => {
               <FormItem>
                 <FormLabel>Nomor Plat</FormLabel>
                 <FormControl>
-                  <Input placeholder="contoh: AST-XXX" {...field} />
+                  <Input placeholder="contoh: B 2828 C" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

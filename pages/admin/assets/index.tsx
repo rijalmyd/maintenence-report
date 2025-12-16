@@ -48,7 +48,7 @@ const AssetPage: React.FC = () => {
                   value="equipment"
                   onClick={() => route.push("/admin/assets?asset=equipment")}
                 >
-                  Aset Lainya
+                  Equipment
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="vehicle">

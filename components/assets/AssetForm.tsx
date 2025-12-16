@@ -59,7 +59,6 @@ const AssetForm: React.FC = () => {
       z.infer<typeof CreateAssetSchema>
     >,
     defaultValues: {
-      asset_code: "",
       brand: "",
       model: "",
       name: "",
@@ -73,7 +72,6 @@ const AssetForm: React.FC = () => {
   const prevStep = () => setStep((s) => s - 1);
 
   function onSubmit(values: z.infer<typeof CreateAssetSchema>) {
-    console.log("Submitted:", values);
     nextStep();
     setAssetData(values);
   }
@@ -108,7 +106,7 @@ const AssetForm: React.FC = () => {
                   <FormItem>
                     <FormLabel>Nama</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Nama Aset" {...field} />
+                      <Input type="text" placeholder="Cth: Canter" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -116,7 +114,7 @@ const AssetForm: React.FC = () => {
               />
               <Field>
                 <FormItem>
-                  <FormLabel>Asset Type</FormLabel>
+                  <FormLabel>Jenis Aset</FormLabel>
                   <FormControl>
                     <Select
                       onValueChange={(asset) =>
@@ -131,8 +129,8 @@ const AssetForm: React.FC = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          <SelectLabel>Asset Type</SelectLabel>
-                          <SelectItem value="vehicle">Vehicle</SelectItem>
+                          <SelectLabel>Jenis Asset</SelectLabel>
+                          <SelectItem value="vehicle">Kendaraan</SelectItem>
                           <SelectItem value="chassis">Chassis</SelectItem>
                           <SelectItem value="equipment">Equipment</SelectItem>
                         </SelectGroup>
@@ -143,22 +141,7 @@ const AssetForm: React.FC = () => {
                 </FormItem>
               </Field>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="asset_code"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Kode Aset</FormLabel>
-                      <FormControl>
-                        <Input placeholder="contoh: AST-XXX" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
+              <FormField
                   control={form.control}
                   name="brand"
                   render={({ field }) => (
@@ -167,7 +150,7 @@ const AssetForm: React.FC = () => {
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="ex: toyota, dll"
+                          placeholder="ex: Toyota, dll"
                           {...field}
                         />
                       </FormControl>
@@ -175,7 +158,6 @@ const AssetForm: React.FC = () => {
                     </FormItem>
                   )}
                 />
-              </div>
 
               <FormField
                 control={form.control}
@@ -186,7 +168,7 @@ const AssetForm: React.FC = () => {
                     <FormControl>
                       <Input
                         type="text"
-                        placeholder="Masukan Model"
+                        placeholder="Cth: Avanza, dll"
                         {...field}
                       />
                     </FormControl>
