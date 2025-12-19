@@ -45,6 +45,7 @@ export const useCreateChassis = () => {
 };
 
 export const useDeleteChassis = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (chassisId: string) => {
@@ -54,6 +55,10 @@ export const useDeleteChassis = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["chassises"] });
       toast.success("Chassis deleted successfully");
+      router.push("/admin/assets?asset=chassis");
+      setTimeout(() => {
+        router.reload();
+      }, 1000);
     },
     onError: () => {
       toast.error("Failed to delete Chassis");
@@ -62,6 +67,7 @@ export const useDeleteChassis = () => {
 };
 
 export const useUpdateChassis = (chassisId: string) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (data: Partial<z.infer<typeof UpdateChassisSchema>>) => {
@@ -71,6 +77,10 @@ export const useUpdateChassis = (chassisId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["chassises"] });
       toast.success("Chassis updated successfully");
+      router.push("/admin/assets?asset=chassis");
+      setTimeout(() => {
+        router.reload();
+      }, 1000); 
     },
     onError: () => {
       toast.error("Failed to update Chassis");

@@ -46,6 +46,7 @@ export const useCreateEquipment = () => {
 
 // update equipment
 export const useUpdateEquipment = (equipmentId: string) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (data: Partial<z.infer<typeof UpdateEquipmentSchema>>) => {
@@ -55,6 +56,10 @@ export const useUpdateEquipment = (equipmentId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["equipments"] });
       toast.success("Equipment updated successfully");
+      router.push("/admin/assets?asset=equipment");
+      setTimeout(() => {
+        router.reload();
+      }, 1000);
     },
     onError: () => {
       toast.error("Failed to update Equipment");
@@ -64,6 +69,7 @@ export const useUpdateEquipment = (equipmentId: string) => {
 
 // delete equipment
 export const useDeleteEquipment = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (equipmentId: string) => {
@@ -73,6 +79,10 @@ export const useDeleteEquipment = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["equipments"] });
       toast.success("Equipment deleted successfully");
+      router.push("/admin/assets?asset=equipment");
+      setTimeout(() => {
+        router.reload();
+      }, 1000);
     },
     onError: () => {
       toast.error("Failed to delete Equipment");

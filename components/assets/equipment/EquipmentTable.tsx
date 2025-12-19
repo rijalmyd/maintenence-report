@@ -36,9 +36,8 @@ import {
 import { ArrowUpDown, ChevronDown, MoreHorizontal, Trash2 } from "lucide-react";
 import React from "react";
 import EquipmentEditForm from "./EquipmentEditForm";
-import { AlertDialogHeader, AlertDialogFooter } from "@/components/ui/alert-dialog";
 import { useDeleteVehicle } from "@/hooks/useVehicle";
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "@radix-ui/react-alert-dialog";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction, AlertDialogHeader, AlertDialogFooter } from "@/components/ui/alert-dialog";
 
 type EquipmentWithAsset = Prisma.EquipmentGetPayload<{
   include: { asset: true };

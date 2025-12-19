@@ -45,6 +45,7 @@ export const useCreateVehicle = () => {
 };
 
 export const useDeleteVehicle = () => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (vehicleId: string) => {
@@ -54,6 +55,10 @@ export const useDeleteVehicle = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["vehicles"] });
       toast.success("Vehicle deleted successfully");
+      router.push("/admin/assets?asset=vehicle");
+      setTimeout(() => {
+        router.reload();
+      }, 1000);
     },
     onError: () => {
       toast.error("Failed to delete Vehicle");
@@ -62,6 +67,7 @@ export const useDeleteVehicle = () => {
 };
 
 export const useUpdateVehicle = (vehicleId: string) => {
+  const router = useRouter();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (data: Partial<z.infer<typeof UpdateVehicleSchema>>) => {
@@ -71,6 +77,10 @@ export const useUpdateVehicle = (vehicleId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["vehicles"] });
       toast.success("Vehicle updated successfully");
+      router.push("/admin/assets?asset=vehicle");
+      setTimeout(() => {
+        router.reload();
+      }, 1000);
     },
     onError: () => {
       toast.error("Failed to update Vehicle");
