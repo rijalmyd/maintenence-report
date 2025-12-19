@@ -1,3 +1,4 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -18,8 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Prisma } from "@/generated/prisma/client";
-import { useGetAllEquipment } from "@/hooks/useEquipment";
+import { Asset, Prisma } from "@/generated/prisma/client";
+import { useDeleteEquipment, useGetAllEquipment } from "@/hooks/useEquipment";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -32,8 +33,12 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, MoreHorizontal, Trash2 } from "lucide-react";
 import React from "react";
+import EquipmentEditForm from "./EquipmentEditForm";
+import { AlertDialogHeader, AlertDialogFooter } from "@/components/ui/alert-dialog";
+import { useDeleteVehicle } from "@/hooks/useVehicle";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "@radix-ui/react-alert-dialog";
 
 type EquipmentWithAsset = Prisma.EquipmentGetPayload<{
   include: { asset: true };
@@ -67,7 +72,32 @@ export const columns: ColumnDef<EquipmentWithAsset>[] = [
     header: "No",
     cell: ({ row }) => <div className="capitalize">{row.index + 1}</div>,
   },
+{
+    accessorKey: "asset.name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Nama
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const asset = row.original.asset as Asset;
 
+      return (
+        <div className="flex flex-col">
+          <span className="font-semibold">{asset?.name}</span>
+          <span className="text-sm text-muted-foreground">
+            {asset?.brand && `brand: ${asset.brand}`}
+          </span>
+        </div>
+      );
+    },
+  },
   {
     accessorKey: "asset.code",
     header: "Kode",
@@ -75,32 +105,46 @@ export const columns: ColumnDef<EquipmentWithAsset>[] = [
       <div className="capitalize">{row.original.asset?.asset_code}</div>
     ),
   },
-
+  {
+      accessorKey: "asset.model",
+      header: "Model",
+      cell: ({ row }) => {
+        return (
+          <div className="flex flex-col">
+            <span className="font-semibold">{row.original.asset?.model}</span>
+            <span className="text-xs text-muted-foreground">
+              no seri: {row.original.asset?.serrial_number}
+            </span>
+          </div>
+        );
+      },
+    },
+    {
+    accessorKey: "asset.status",
+    header: "Status",
+    cell: ({ row }) => {
+      return (
+        <div className="capitalize">
+          {row.original.asset.is_active ? (
+            <Badge>Aktif</Badge>
+          ) : (
+            <Badge variant="destructive">Tidak Aktif</Badge>
+          )}
+        </div>
+      );
+    },
+  },
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const equipment = row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex justify-end gap-2">
+          {/* <ViewEquipment equipment={equipment} /> */}
+          <EditEquipment equipment={equipment} />
+          <DeleteEquipment equipmentId={equipment.id} />
+        </div>
       );
     },
   },
@@ -250,6 +294,73 @@ const EquipmentTable = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const DeleteEquipment = ({ equipmentId }: { equipmentId: string }) => {
+  const [open, setOpen] = React.useState(false);
+  const deleteEquipment = useDeleteEquipment();
+
+  const handleDelete = async () => {
+    try {
+      await deleteEquipment.mutateAsync(equipmentId);
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button size="icon" variant="destructive">
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </AlertDialogTrigger>
+
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete the
+            equipment.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleDelete}>
+            Delete
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
+
+const EditEquipment = ({ equipment }: { equipment: EquipmentWithAsset }) => {
+  const defaultValues = {
+    asset_code: equipment.asset.asset_code,
+    brand: equipment.asset.brand ?? undefined,
+    model: equipment.asset.model ?? undefined,
+    name: equipment.asset.name,
+    purchase_price: equipment.asset.purchase_price ?? undefined,
+    serial_number: equipment.asset.serrial_number ?? undefined,
+    purchase_date: equipment.asset.purchase_date
+      ? new Date(equipment.asset.purchase_date)
+      : undefined,
+    is_active: equipment.asset.is_active,
+    equipment_code: equipment.equipment_code ?? undefined,
+    equipment_type: equipment.equipment_type ?? undefined,
+    specification: equipment.specification ?? undefined,
+    condition: equipment.condition ?? undefined,
+  }
+
+  return (
+    <EquipmentEditForm
+      equipmentId={equipment.id}
+      defaultValues={defaultValues}
+    />
   );
 };
 

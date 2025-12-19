@@ -1,6 +1,6 @@
 import { Prisma } from "@/generated/prisma/client";
 import api from "@/lib/fetcher";
-import { CreateVehicleSchema } from "@/schema/vehicleSchema";
+import { CreateVehicleSchema, UpdateVehicleSchema } from "@/schema/vehicleSchema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
@@ -40,6 +40,40 @@ export const useCreateVehicle = () => {
     },
     onError: () => {
       toast.error("Failed to create Asset");
+    },
+  });
+};
+
+export const useDeleteVehicle = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (vehicleId: string) => {
+      const res = await api.delete(`/vehicles/${vehicleId}`);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+      toast.success("Vehicle deleted successfully");
+    },
+    onError: () => {
+      toast.error("Failed to delete Vehicle");
+    },
+  });
+};
+
+export const useUpdateVehicle = (vehicleId: string) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: Partial<z.infer<typeof UpdateVehicleSchema>>) => {
+      const res = await api.patch(`/vehicles/${vehicleId}`, data);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+      toast.success("Vehicle updated successfully");
+    },
+    onError: () => {
+      toast.error("Failed to update Vehicle");
     },
   });
 };

@@ -1,4 +1,4 @@
-import { useGetAllMaintenence } from "@/hooks/useMaintenences";
+import { useDeleteMaintenence, useGetAllMaintenence } from "@/hooks/useMaintenences";
 import { formatDateID } from "@/lib/formatDate";
 import { Maintenence } from "@/types/maintenence";
 import {
@@ -13,7 +13,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { ChevronDown, Download, MoreHorizontal, Trash2 } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
@@ -35,6 +35,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { AlertDialogHeader, AlertDialogFooter, AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "../ui/alert-dialog";
 
 export const columns: ColumnDef<Maintenence>[] = [
   {
@@ -86,13 +87,6 @@ export const columns: ColumnDef<Maintenence>[] = [
     ),
   },
   {
-    accessorKey: "total_cost",
-    header: "Total",
-    cell: ({ row }) => (
-      <div className="capitalize">Rp. {row.original.total_cost}</div>
-    ),
-  },
-  {
     accessorKey: "user_id",
     header: "User",
     cell: ({ row }) => (
@@ -107,10 +101,10 @@ export const columns: ColumnDef<Maintenence>[] = [
     ),
   },
   {
-    accessorKey: "user_id",
-    header: "User",
+    accessorKey: "asset.asset_type",
+    header: "Jenis Aset",
     cell: ({ row }) => (
-      <div className="capitalize">{row.original.user.fullname}</div>
+      <div className="capitalize">{row.original.asset.asset_type}</div>
     ),
   },
   {
@@ -125,27 +119,12 @@ export const columns: ColumnDef<Maintenence>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
+      const maintenance = row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+         <div className="flex justify-end gap-2">
+          <DownloadMaintenancePDF maintenanceId={maintenance.id} />
+          <DeleteMaintenance maintenanceId={maintenance.id} />
+         </div>
       );
     },
   },
@@ -183,12 +162,12 @@ const MaintenenceTable: React.FC = () => {
     <div className="w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter fullnames..."
+          placeholder="Filter nomor laporan..."
           value={
-            (table.getColumn("fullname")?.getFilterValue() as string) ?? ""
+            (table.getColumn("record_number")?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
-            table.getColumn("fullname")?.setFilterValue(event.target.value)
+            table.getColumn("record_number")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -296,4 +275,71 @@ const MaintenenceTable: React.FC = () => {
     </div>
   );
 };
+
+const DeleteMaintenance = ({ maintenanceId }: { maintenanceId: string }) => {
+  const [open, setOpen] = React.useState(false);
+  const deleteMaintenance = useDeleteMaintenence();
+
+  const handleDelete = async () => {
+    try {
+      await deleteMaintenance.mutateAsync(maintenanceId);
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button size="icon" variant="destructive">
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </AlertDialogTrigger>
+
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete the
+            maintenance report.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleDelete}>
+            Delete
+          </AlertDialogAction>  
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
+
+const DownloadMaintenancePDF = ({
+  maintenanceId,
+}: {
+  maintenanceId: string;
+}) => {
+  const handleDownload = () => {
+    // open PDF in new tab or force download
+    window.open(
+      `/api/maintenences/pdf?id=${maintenanceId}`,
+      "_blank"
+    );
+  };
+
+  return (
+    <Button
+      size="icon"
+      variant="outline"
+      onClick={handleDownload}
+      title="Download PDF"
+    >
+      <Download className="h-4 w-4" />
+    </Button>
+  );
+};
+
 export default MaintenenceTable;

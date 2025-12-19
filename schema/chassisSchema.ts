@@ -21,7 +21,7 @@ export const CreateChessisSchema = z.object({
   notes: z.string().optional(),
 });
 
-export const UpdateChessisSchema = z.object({
+export const UpdateChassisSchema = z.object({
   // asset
   asset_code: z.string(),
   name: z.string(),
@@ -38,6 +38,7 @@ export const UpdateChessisSchema = z.object({
     )
     .optional(),
   purchase_price: z.number().optional(),
+  is_active: z.boolean().optional(),
 
   // chassis
   chassis_number: z.string().optional(),

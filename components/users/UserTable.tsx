@@ -12,7 +12,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, MoreHorizontal, Trash2 } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
@@ -34,6 +34,10 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogTitle, AlertDialogDescription, AlertDialogCancel, AlertDialogAction } from "../ui/alert-dialog";
+import { AlertDialogHeader, AlertDialogFooter } from "../ui/alert-dialog";
+import UserEditDialog from "./UserEditForm";
+import { Badge } from "../ui/badge";
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -93,30 +97,31 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => <div className="capitalize">{row.getValue("role")}</div>,
   },
   {
+    accessorKey: "asset.status",
+    header: "Status",
+    cell: ({ row }) => {
+      return (
+        <div className="capitalize">
+          {row.original.is_active ? (
+            <Badge>Aktif</Badge>
+          ) : (
+            <Badge variant="destructive">Tidak Aktif</Badge>
+          )}
+        </div>
+      );
+    },
+  },
+  {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
       const payment = row.original;
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex justify-end gap-2">
+          {/* <ViewVehicle vehicle={vehicle} /> */}
+          {/* <SparepartEditDialog sparepart={payment} /> */}
+          <UserEditDialog user={payment} />
+        </div>
       );
     },
   },

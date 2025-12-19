@@ -1,3 +1,4 @@
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -20,7 +21,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Prisma } from "@/generated/prisma/browser";
-import { useGetAllChassis } from "@/hooks/useChassis";
+import { Asset } from "@/generated/prisma/client";
+import { useDeleteChassis, useGetAllChassis } from "@/hooks/useChassis";
+import { useDeleteVehicle } from "@/hooks/useVehicle";
 
 import { formatDateID } from "@/lib/formatDate";
 import {
@@ -35,8 +38,9 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ChevronDown, MoreHorizontal } from "lucide-react";
+import { ArrowUpDown, ChevronDown, MoreHorizontal, Trash2 } from "lucide-react";
 import React from "react";
+import ChassisEditForm from "./ChassisEditForm";
 
 type ChassisWithAsset = Prisma.ChassisGetPayload<{
   include: { asset: true };
@@ -70,6 +74,32 @@ export const columns: ColumnDef<ChassisWithAsset>[] = [
     header: "No",
     cell: ({ row }) => <div className="capitalize">{row.index + 1}</div>,
   },
+{
+    accessorKey: "asset.name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Nama
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const asset = row.original.asset as Asset;
+
+      return (
+        <div className="flex flex-col">
+          <span className="font-semibold">{asset?.name}</span>
+          <span className="text-sm text-muted-foreground">
+            tipe: {row.original.chassis_type}
+          </span>
+        </div>
+      );
+    },
+  },
 
   {
     accessorKey: "asset.code",
@@ -78,7 +108,20 @@ export const columns: ColumnDef<ChassisWithAsset>[] = [
       <div className="capitalize">{row.original.asset.asset_code}</div>
     ),
   },
-
+  {
+      accessorKey: "chassis_category",
+      header: "Kategori",
+      cell: ({ row }) => {
+        return (
+          <div className="flex flex-col">
+            <span className="font-semibold">{row.getValue("chassis_category")}</span>
+            <span className="text-xs text-muted-foreground">
+              axle: {row.original.axle_count}
+            </span>
+          </div>
+      );
+    },
+  },
   {
     accessorKey: "no_kir",
     header: "Nomor KIR",
@@ -113,27 +156,13 @@ export const columns: ColumnDef<ChassisWithAsset>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+      const chassis = row.original;
+       return (
+        <div className="flex justify-end gap-2">
+          {/* /* <ViewVehicle vehicle={vehicle} /> */}
+          <EditChassis chassis={chassis} /> 
+          <DeleteChassis chassisId={chassis.id} />
+        </div>
       );
     },
   },
@@ -283,6 +312,83 @@ const ChassisTable: React.FC = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+
+const DeleteChassis = ({ chassisId }: { chassisId: string }) => {
+  const [open, setOpen] = React.useState(false);
+  const deleteChassis = useDeleteChassis();
+
+  const handleDelete = async () => {
+    try {
+      await deleteChassis.mutateAsync(chassisId);
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button size="icon" variant="destructive">
+          <Trash2 className="h-4 w-4" />
+        </Button>
+      </AlertDialogTrigger>
+
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete the
+            chassis.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={handleDelete}>
+            Delete
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+};
+
+const EditChassis = ({ chassis }: { chassis: ChassisWithAsset }) => {
+  // Mapping data dari DB/API ke struktur Zod Schema
+  const defaultValues = {
+    // Mapping dari Asset (Table/Relation)
+    asset_code: chassis.asset.asset_code,
+    name: chassis.asset.name,
+    brand: chassis.asset.brand ?? undefined,
+    model: chassis.asset.model ?? undefined,
+    serial_number: chassis.asset.serrial_number ?? undefined, // Typo fixed from 'serrial_number'
+    purchase_date: chassis.asset.purchase_date
+      ? new Date(chassis.asset.purchase_date)
+      : undefined,
+    purchase_price: chassis.asset.purchase_price ?? undefined,
+    is_active: chassis.asset.is_active,
+
+    // Mapping dari Chassis (Table) sesuai UpdateChassisSchema
+    chassis_number: chassis.chassis_number ?? undefined,
+    chassis_category: chassis.chassis_category ?? undefined,
+    chassis_type: (chassis.chassis_type as "RANGKA" | "FLATBED") ?? undefined,
+    axle_count: chassis.axle_count ?? undefined,
+    no_kir: chassis.no_kir ?? undefined,
+    kir_due_date: chassis.kir_due_date
+      ? new Date(chassis.kir_due_date)
+      : undefined,
+    notes: chassis.notes ?? undefined,
+  };
+
+  return (
+    <ChassisEditForm
+      chassisId={chassis.id}
+      defaultValues={defaultValues}
+    />
   );
 };
 

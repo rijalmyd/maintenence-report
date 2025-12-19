@@ -139,7 +139,6 @@ export default async function handler(
           },
         });
       }
-
       default:
         return res.status(405).json(fail("Method not allowed"));
     }

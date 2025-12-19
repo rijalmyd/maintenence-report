@@ -1,14 +1,12 @@
 import z from "zod";
 
 export const CreateDriverSchema = z.object({
-  driver_number: z.string(),
   name: z.string(),
   phone: z.string(),
   notes: z.string().optional(),
 });
 
 export const UpdateDriverSchema = z.object({
-  driver_number: z.string().optional(),
   name: z.string().optional(),
   phone: z.string().optional(),
   notes: z.string().optional(),

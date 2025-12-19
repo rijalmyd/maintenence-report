@@ -50,7 +50,7 @@ export function generateVehicleHTML(data: any) {
         .join("")
     : "<div>Tidak ada sparepart</div>";
 
-  const galleryImages = data.images;
+  const galleryImages = data.images.slice(0, 3);
   const footerImage = data.asset_image_url;
 
   return `
@@ -80,8 +80,8 @@ export function generateVehicleHTML(data: any) {
 
         .table-clean td {
           border: none !important;
-          padding: 3px 0;
-          font-size: 12px;
+          padding: 2px 0;
+          font-size: 10px;
         }
 
         .table-clean td.label {
@@ -115,8 +115,9 @@ export function generateVehicleHTML(data: any) {
         }
         td, th {
           border: 1px solid black;
-          padding: 4px 6px;
+          padding: 4px 2px;
           vertical-align: top;
+          font-size: 10px;
         }
 
         /* Header Specifics */
@@ -124,16 +125,16 @@ export function generateVehicleHTML(data: any) {
         .logo-cell { width: 100px; text-align: center; vertical-align: middle; padding: 5px; }
         .title-cell { text-align: center; vertical-align: middle; }
         .meta-table { width: 100%; border: none; margin: 0; }
-        .meta-table td { border: none; border-bottom: 1px solid black; border-left: 1px solid black; padding: 2px 5px; }
+        .meta-table td { border: none; border-bottom: 1px solid black; border-left: 1px solid black; padding: 2px 2px; font-size: 10px; }
         .meta-table tr:last-child td { border-bottom: none; }
 
         /* Main Title */
         h1.main-title {
           text-align: center;
           text-decoration: underline;
-          font-size: 16px;
+          font-size: 14px;
           font-weight: bold;
-          margin: 15px 0;
+          margin: 12px 0;
           text-transform: uppercase;
         }
 
@@ -159,12 +160,12 @@ export function generateVehicleHTML(data: any) {
         .date-badge {
           background: linear-gradient(to bottom, #e0e0e0, #bdbdbd);
           border: 1px solid black;
-          padding: 5px 20px;
+          padding: 5px 16px;
           font-weight: bold;
-          font-size: 14px;
+          font-size: 12px;
           text-align: center;
           width: fit-content;
-          margin: 10px auto;
+          margin: 8px auto;
           box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
           border-radius: 4px;
         }
@@ -224,8 +225,8 @@ export function generateVehicleHTML(data: any) {
         .footer-image-frame {
            border: 4px solid #FFD700;
            box-shadow: 3px 3px 5px rgba(0,0,0,0.4);
-           width: 180px;
-           height: 220px;
+           width: 160px;
+           height: 200px;
            overflow: hidden;
         }
         
@@ -248,14 +249,14 @@ export function generateVehicleHTML(data: any) {
           
           <td class="title-cell">
             <div style="font-size: 14px; font-weight: bold;">PT.ADITYA ANDHIKA UTAMA</div>
-            <div style="font-size: 16px; font-weight: bold; margin-top: 5px;">LAPORAN KEGIATAN</div>
+            <div style="font-size: 14px; font-weight: bold; margin-top: 5px;">LAPORAN KEGIATAN</div>
           </td>
 
           <td style="width: 250px; padding:0;">
             <table class="meta-table">
               <tr>
                 <td width="100">No. Dokumen</td>
-                <td>: ${data.id}</td>
+                <td>: ${data.record_number}</td>
               </tr>
               <tr>
                 <td>Tanggal Kegiatan</td>
@@ -281,7 +282,7 @@ export function generateVehicleHTML(data: any) {
               </tr>
               <tr>
                 <td>Halaman</td>
-                <td>: </td>
+                <td>: 1</td>
               </tr>
             </table>
           </td>
@@ -295,12 +296,13 @@ export function generateVehicleHTML(data: any) {
         <!-- =========================== -->
         <!-- A. TUJUAN -->
         <!-- =========================== -->
-        <div class="section-box" style="border: none; border-bottom: 1px solid black;">
+       <div class="section-box" style="border: none; border-bottom: 1px solid black;">
           <span class="section-header">A. Tujuan Kegiatan :</span>
-          <div>
-            untuk menjaga performa, keamanan, dan keandalan kendaraan agar tetap optimal. Berikut adalah beberapa tujuan spesifik dari kegiatan service kendaraan:
+          <div style="font-size: 10px; margin-bottom: 5px;">
+            Untuk menjaga performa, keamanan, dan keandalan kendaraan agar tetap optimal. Berikut adalah beberapa tujuan spesifik dari kegiatan service kendaraan:
           </div>
-          <ol>
+          
+          <ol style="column-count: 2; column-gap: 20px; margin: 0 0 5px 20px; font-size: 10px;">
             <li><span class="bold">Memastikan Keamanan Berkendara</span></li>
             <li><span class="bold">Memperpanjang Umur Pakai Kendaraan</span></li>
             <li><span class="bold">Mengoptimalkan Performa Kendaraan</span></li>
@@ -312,7 +314,8 @@ export function generateVehicleHTML(data: any) {
             <li><span class="bold">Memenuhi Kewajiban Garansi</span></li>
             <li><span class="bold">Mencegah Gangguan di Jalan</span></li>
           </ol>
-          <div>
+
+          <div style="font-size: 10px;">
             Dengan melakukan service kendaraan secara berkala, pengguna dapat menikmati kendaraan yang aman, nyaman, dan andal dalam jangka panjang.
           </div>
         </div>
@@ -322,7 +325,7 @@ export function generateVehicleHTML(data: any) {
         <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
           <span class="section-header">B. Penanggung Jawab Kegiatan :</span>
-          <ul>
+          <ul style="font-size: 10px; margin: 0 0 5px 20px; padding: 0;">
             <li>Petugas Safety</li>
             <li>TEAM Mekanik PT.HARTONO MOTOR</li>
             <li>Direktur & Koordinator Safety</li>
@@ -341,107 +344,117 @@ export function generateVehicleHTML(data: any) {
         <!-- D. DATA KENDARAAN (REVISED) -->
         <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
-            <span class="section-header">D. Data Kendaraan :</span>
-
-            <table class="table-clean">
-                <tr>
-                    <td class="label">Nama Kendaraan</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.name}</td>
-                </tr>
-                <tr>
-                    <td class="label">Plat Nomor</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.vehicle?.license_plate}</td>
-                </tr>
-                <tr>
-                    <td class="label">Kilometer</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.km_asset} KM</td>
-                </tr>
-                <tr>
-                    <td class="label">Nomor Mesin</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.vehicle?.engine_number}</td>
-                </tr>
-                <tr>
-                    <td class="label">Nomor Rangka</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.vehicle?.frame_number}</td>
-                </tr>
-                <tr>
-                    <td class="label">Nomor KIR</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.vehicle?.no_kir}</td>
-                </tr>
-                <tr>
-                    <td class="label">Tanggal Akhir KIR</td>
-                    <td class="separator">:</td>
-                    <td class="value">${kirShortDate}</td>
-                </tr>
-                <tr>
-                    <td class="label">Tanggal Akhir STNK</td>
-                    <td class="separator">:</td>
-                    <td class="value">${stnkShortDate}</td>
-                </tr>
-                <tr>
-                    <td class="label">Catatan</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.vehicle?.notes}</td>
-                </tr>
-            </table>
+           <div style="display: flex; gap: 24px; align-items: flex-start;">
+              <div style="flex: 1;">
+                <span class="section-header">D. Data Kendaraan :</span>
+                <table class="table-clean">
+                    <tr>
+                        <td class="label">Nama Kendaraan</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.name}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Plat Nomor</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.vehicle?.license_plate}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Kilometer</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.km_asset} KM</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Nomor Mesin</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.vehicle?.engine_number}</td>
+                    </tr>
+                </table>
+              </div>
+              <div style="flex: 1;">
+              <span class="section-header"></span>
+              <table class="table-clean">
+                  <tr>
+                      <td class="label">Nomor Rangka</td>
+                      <td class="separator">:</td>
+                      <td class="value">${data.asset?.vehicle?.frame_number}</td>
+                  </tr>
+                  <tr>
+                      <td class="label">Tanggal Akhir KIR</td>
+                      <td class="separator">:</td>
+                      <td class="value">${kirShortDate}</td>
+                  </tr>
+                  <tr>
+                      <td class="label">Tanggal Akhir STNK</td>
+                      <td class="separator">:</td>
+                      <td class="value">${stnkShortDate}</td>
+                  </tr>
+                  <tr>
+                      <td class="label">Catatan</td>
+                      <td class="separator">:</td>
+                      <td class="value">${data.asset?.vehicle?.notes}</td>
+                  </tr>
+              </table>
+              </div>
+           </div>
         </div>
 
         <!-- =========================== -->
         <!-- E. DATA DRIVER (REVISED) -->
         <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
-            <span class="section-header">E. Data Driver :</span>
+          <div style="display: flex; gap: 24px; align-items: flex-start;">
 
-            <table class="table-clean">
+            <!-- KIRI -->
+            <div style="flex: 1;">
+              <span class="section-header">E. Data Driver :</span>
+              <table class="table-clean">
                 <tr>
-                    <td class="label">Nomor Driver</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.driver?.driver_number}</td>
+                  <td class="label">Nomor Driver</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.driver?.driver_number}</td>
                 </tr>
                 <tr>
-                    <td class="label">Nama Driver</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.driver?.name}</td>
+                  <td class="label">Nama Driver</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.driver?.name}</td>
                 </tr>
                 <tr>
-                    <td class="label">Nomor HP</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.driver?.phone}</td>
+                  <td class="label">Nomor HP</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.driver?.phone}</td>
                 </tr>
-            </table>
+              </table>
+            </div>
+
+            <!-- KANAN -->
+            <div style="flex: 1;">
+              <span class="section-header">F. Kegiatan :</span>
+              <table class="table-clean">
+                <tr>
+                  <td class="label">Keluhan</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.complaint}</td>
+                </tr>
+                <tr>
+                  <td class="label">Catatan Perbaikan</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.repair_notes}</td>
+                </tr>
+                <tr>
+                  <td class="label">Sparepart</td>
+                  <td class="separator">:</td>
+                  <td class="value">${sparepartsHTML}</td>
+                </tr>
+              </table>
+            </div>
+
+          </div>
         </div>
+
 
         <!-- =========================== -->
         <!-- F. KEGIATAN -->
         <!-- =========================== -->
-        <div class="section-box" style="border: none; border-bottom: 1px solid black;">
-          <span class="section-header">F. Kegiatan :</span>
-          <div>
-            <table class="table-clean">
-                <tr>
-                    <td class="label">Keluhan</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.complaint}</td>
-                </tr>
-                <tr>
-                    <td class="label">Catatan Perbaikan</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.repair_notes}</td>
-                </tr>
-                <tr>
-                    <td class="label">Sparepart</td>
-                    <td class="separator">:</td>
-                    <td class="value">${sparepartsHTML}</td>
-                </tr>
-            </table>
-          </div>
-        </div>
 
         <!-- =========================== -->
         <!-- G. DOKUMENTASI -->
@@ -577,7 +590,7 @@ export function generateChassisHTML(data: any) {
         .join("")
     : "<div>Tidak ada sparepart</div>";
 
-  const galleryImages = data.images;
+  const galleryImages = data.images.slice(0, 3);
   const footerImage = data.asset_image_url;
 
   return `
@@ -597,9 +610,6 @@ export function generateChassisHTML(data: any) {
           margin: 0 auto;
         }
 
-        /* ======================= */
-        /*  TABLE-CLEAN (NO BORDER) */
-        /* ======================= */
         .table-clean {
           width: 100%;
           border-collapse: collapse;
@@ -607,14 +617,14 @@ export function generateChassisHTML(data: any) {
 
         .table-clean td {
           border: none !important;
-          padding: 3px 0;
-          font-size: 12px;
+          padding: 2px 0;
+          font-size: 10px;
         }
 
         .table-clean td.label {
-          width: 180px;
+          width: 140px;
           text-align: left;
-          padding-right: 10px;
+          padding-right: 5px;
           white-space: nowrap;
         }
 
@@ -628,13 +638,9 @@ export function generateChassisHTML(data: any) {
           text-align: left;
         }
 
-        /* Utility Classes */
         .bold { font-weight: bold; }
-        .center { text-align: center; }
         .uppercase { text-transform: uppercase; }
-        .w-100 { width: 100%; }
         
-        /* Table Styles */
         table {
           width: 100%;
           border-collapse: collapse;
@@ -642,29 +648,27 @@ export function generateChassisHTML(data: any) {
         }
         td, th {
           border: 1px solid black;
-          padding: 4px 6px;
+          padding: 4px 2px;
           vertical-align: top;
+          font-size: 10px;
         }
 
-        /* Header Specifics */
         .header-table td { padding: 0; border: 1px solid black; }
         .logo-cell { width: 100px; text-align: center; vertical-align: middle; padding: 5px; }
         .title-cell { text-align: center; vertical-align: middle; }
         .meta-table { width: 100%; border: none; margin: 0; }
-        .meta-table td { border: none; border-bottom: 1px solid black; border-left: 1px solid black; padding: 2px 5px; }
+        .meta-table td { border: none; border-bottom: 1px solid black; border-left: 1px solid black; padding: 2px 2px; font-size: 10px; }
         .meta-table tr:last-child td { border-bottom: none; }
 
-        /* Main Title */
         h1.main-title {
           text-align: center;
           text-decoration: underline;
-          font-size: 16px;
+          font-size: 14px;
           font-weight: bold;
-          margin: 15px 0;
+          margin: 12px 0;
           text-transform: uppercase;
         }
 
-        /* Sections */
         .section-box {
           border: 1px solid black;
           margin-bottom: -1px;
@@ -678,25 +682,23 @@ export function generateChassisHTML(data: any) {
           display: inline-block;
         }
 
-        /* Lists */
         ol, ul { margin: 5px 0 5px 20px; padding: 0; }
         li { margin-bottom: 2px; }
 
-        /* Image Gallery */
         .date-badge {
           background: linear-gradient(to bottom, #e0e0e0, #bdbdbd);
           border: 1px solid black;
-          padding: 5px 20px;
+          padding: 5px 16px;
           font-weight: bold;
-          font-size: 14px;
+          font-size: 12px;
           text-align: center;
           width: fit-content;
-          margin: 10px auto;
+          margin: 8px auto;
           box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
           border-radius: 4px;
         }
 
-         .gallery-container {
+       .gallery-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
@@ -721,7 +723,6 @@ export function generateChassisHTML(data: any) {
             object-fit: cover;
         }
 
-        /* Footer / Signatures */
         .footer-container {
           display: flex;
           justify-content: space-between;
@@ -751,8 +752,8 @@ export function generateChassisHTML(data: any) {
         .footer-image-frame {
            border: 4px solid #FFD700;
            box-shadow: 3px 3px 5px rgba(0,0,0,0.4);
-           width: 180px;
-           height: 220px;
+           width: 160px;
+           height: 200px;
            overflow: hidden;
         }
         
@@ -775,14 +776,14 @@ export function generateChassisHTML(data: any) {
           
           <td class="title-cell">
             <div style="font-size: 14px; font-weight: bold;">PT.ADITYA ANDHIKA UTAMA</div>
-            <div style="font-size: 16px; font-weight: bold; margin-top: 5px;">LAPORAN KEGIATAN</div>
+            <div style="font-size: 14px; font-weight: bold; margin-top: 5px;">LAPORAN KEGIATAN</div>
           </td>
 
           <td style="width: 250px; padding:0;">
             <table class="meta-table">
               <tr>
                 <td width="100">No. Dokumen</td>
-                <td>: ${data.id}</td>
+                <td>: ${data.record_number}</td>
               </tr>
               <tr>
                 <td>Tanggal Kegiatan</td>
@@ -808,7 +809,7 @@ export function generateChassisHTML(data: any) {
               </tr>
               <tr>
                 <td>Halaman</td>
-                <td>: </td>
+                <td>: 1</td>
               </tr>
             </table>
           </td>
@@ -819,15 +820,13 @@ export function generateChassisHTML(data: any) {
 
       <div style="border: 1px solid black;">
 
-        <!-- =========================== -->
-        <!-- A. TUJUAN -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
           <span class="section-header">A. Tujuan Kegiatan :</span>
-          <div>
+          <div style="font-size: 10px; margin-bottom: 5px;">
             Untuk menjaga performa, keamanan, dan keandalan chassis agar tetap optimal. Berikut adalah beberapa tujuan spesifik dari kegiatan service chassis:
           </div>
-          <ol>
+          
+          <ol style="column-count: 2; column-gap: 20px; margin: 0 0 5px 20px; font-size: 10px;">
             <li><span class="bold">Memastikan Keamanan Berkendara</span></li>
             <li><span class="bold">Memperpanjang Umur Pakai Chassis</span></li>
             <li><span class="bold">Mengoptimalkan Performa Chassis</span></li>
@@ -839,179 +838,143 @@ export function generateChassisHTML(data: any) {
             <li><span class="bold">Memenuhi Kewajiban Garansi</span></li>
             <li><span class="bold">Mencegah Gangguan di Jalan</span></li>
           </ol>
-          <div>
-            Dengan melakukan service chassis secara berkala, pengguna dapat menikmati chassis yang aman, nyaman, dan andal dalam jangka panjang.
-          </div>
         </div>
 
-        <!-- =========================== -->
-        <!-- B. PENANGGUNG JAWAB -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
           <span class="section-header">B. Penanggung Jawab Kegiatan :</span>
-          <ul>
+          <ul style="font-size: 10px; margin: 0 0 5px 20px; padding: 0;">
             <li>Petugas Safety</li>
             <li>TEAM Mekanik PT.HARTONO MOTOR</li>
             <li>Direktur & Koordinator Safety</li>
           </ul>
         </div>
 
-        <!-- =========================== -->
-        <!-- C. PPE -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
           <span class="section-header">C. Peralatan Pelindung Diri (PPE) :</span>
-          <div>APD</div>
+          <div style="font-size: 10px;">APD</div>
         </div>
 
-        <!-- =========================== -->
-        <!-- D. DATA Chassis (REVISED) -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
-            <span class="section-header">D. Data Chassis :</span>
-
-            <table class="table-clean">
-                <tr>
-                    <td class="label">Nama Chassis</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.name}</td>
-                </tr>
-                <tr>
-                    <td class="label">Nomor Chassis</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.chassis?.chassis_number}</td>
-                </tr>
-                <tr>
-                    <td class="label">Jenis Chassis</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.chassis?.chassis_type}</td>
-                </tr>
-                <tr>
-                    <td class="label">Kategori Chassis</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.chassis?.chassis_category}</td>
-                </tr>
-                <tr>
-                    <td class="label">Nomor Axle</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.chassis?.axle_count}</td>
-                </tr>
-                <tr>
-                    <td class="label">Kilometer</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.km_asset} KM</td>
-                </tr>
-                <tr>
-                    <td class="label">Nomor KIR</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.chassis?.no_kir}</td>
-                </tr>
-                <tr>
-                    <td class="label">Tanggal Akhir KIR</td>
-                    <td class="separator">:</td>
-                    <td class="value">${kirShortDate}</td>
-                </tr>
-                <tr>
-                    <td class="label">Catatan</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.chassis?.notes}</td>
-                </tr>
-            </table>
+           <div style="display: flex; gap: 24px; align-items: flex-start;">
+              <div style="flex: 1;">
+                <span class="section-header">D. Data Chassis :</span>
+                <table class="table-clean">
+                    <tr>
+                        <td class="label">Nama Chassis</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.name}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Nomor Chassis</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.chassis?.chassis_number}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Jenis Chassis</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.chassis?.chassis_type}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Kilometer</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.km_asset} KM</td>
+                    </tr>
+                </table>
+              </div>
+              <div style="flex: 1;">
+              <table class="table-clean" style="margin-top: 18px;">
+                  <tr>
+                      <td class="label">Jumlah Axle</td>
+                      <td class="separator">:</td>
+                      <td class="value">${data.asset?.chassis?.axle_count}</td>
+                  </tr>
+                  <tr>
+                      <td class="label">Nomor KIR</td>
+                      <td class="separator">:</td>
+                      <td class="value">${data.asset?.chassis?.no_kir}</td>
+                  </tr>
+                  <tr>
+                      <td class="label">Tanggal Akhir KIR</td>
+                      <td class="separator">:</td>
+                      <td class="value">${kirShortDate}</td>
+                  </tr>
+                  <tr>
+                      <td class="label">Catatan</td>
+                      <td class="separator">:</td>
+                      <td class="value">${data.asset?.chassis?.notes || "-"}</td>
+                  </tr>
+              </table>
+              </div>
+           </div>
         </div>
 
-        <!-- =========================== -->
-        <!-- E. DATA DRIVER (REVISED) -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
-            <span class="section-header">E. Data Driver :</span>
+          <div style="display: flex; gap: 24px; align-items: flex-start;">
+            <div style="flex: 1;">
+              <span class="section-header">E. Data Driver :</span>
+              <table class="table-clean">
+                <tr>
+                  <td class="label">Nomor Driver</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.driver?.driver_number}</td>
+                </tr>
+                <tr>
+                  <td class="label">Nama Driver</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.driver?.name}</td>
+                </tr>
+                <tr>
+                  <td class="label">Nomor HP</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.driver?.phone}</td>
+                </tr>
+              </table>
+            </div>
 
-            <table class="table-clean">
+            <div style="flex: 1;">
+              <span class="section-header">F. Kegiatan :</span>
+              <table class="table-clean">
                 <tr>
-                    <td class="label">Nomor Driver</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.driver?.driver_number}</td>
+                  <td class="label">Keluhan</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.complaint}</td>
                 </tr>
                 <tr>
-                    <td class="label">Nama Driver</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.driver?.name}</td>
+                  <td class="label">Catatan Perbaikan</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.repair_notes}</td>
                 </tr>
                 <tr>
-                    <td class="label">Nomor HP</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.driver?.phone}</td>
+                  <td class="label">Sparepart</td>
+                  <td class="separator">:</td>
+                  <td class="value">${sparepartsHTML}</td>
                 </tr>
-            </table>
-        </div>
-
-        <!-- =========================== -->
-        <!-- F. KEGIATAN -->
-        <!-- =========================== -->
-        <div class="section-box" style="border: none; border-bottom: 1px solid black;">
-          <span class="section-header">F. Kegiatan :</span>
-          <div>
-            <table class="table-clean">
-                <tr>
-                    <td class="label">Keluhan</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.complaint}</td>
-                </tr>
-                <tr>
-                    <td class="label">Catatan Perbaikan</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.repair_notes}</td>
-                </tr>
-                <tr>
-                    <td class="label">Sparepart</td>
-                    <td class="separator">:</td>
-                    <td class="value">${sparepartsHTML}</td>
-                </tr>
-            </table>
+              </table>
+            </div>
           </div>
         </div>
 
-        <!-- =========================== -->
-        <!-- G. DOKUMENTASI -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black; min-height: 200px;">
           <span class="section-header">G. Dokumentasi Kegiatan:</span>
-          
           <div class="date-badge">${dateString}</div>
-
           <div class="gallery-container">
-            ${galleryImages
-              .map(
-                (img: any) => `
+            ${galleryImages.map((img: any) => `
               <div class="photo-frame">
                 <img src="${img.url}" />
               </div>
-            `
-              )
-              .join("")}
-
-            ${
-              galleryImages.length === 0
-                ? '<div style="padding:20px; text-align:center;">Tidak ada dokumentasi foto</div>'
-                : ""
-            }
+            `).join("")}
+            ${galleryImages.length === 0 ? '<div style="padding:20px; text-align:center;">Tidak ada dokumentasi foto</div>' : ""}
           </div>
         </div>
 
-        <!-- =========================== -->
-        <!-- H. LOKASI -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none;">
           <span class="section-header">H. Lokasi Kegiatan :</span>
-          <div>${data.location ?? "Warehouse PT.AAU"}</div>
+          <div style="font-size: 10px;">${data.location ?? "Warehouse PT.AAU"}</div>
         </div>
 
       </div>
 
-      <!-- =========================== -->
-      <!-- FOOTER (TTD + FOTO) -->
-      <!-- =========================== -->
       <div class="footer-container">
-        
         <div style="flex: 1;">
           <table class="signature-table">
             <thead>
@@ -1025,9 +988,7 @@ export function generateChassisHTML(data: any) {
               <tr>
                 <td class="signature-box">
                   <br><br><br>
-                  <span class="bold" style="text-decoration: underline;">${
-                    data.user?.fullname
-                  }</span><br>
+                  <span class="bold" style="text-decoration: underline;">${data.user?.fullname}</span><br>
                   (MERCY TEAM)
                 </td>
                 <td class="signature-box">
@@ -1045,18 +1006,12 @@ export function generateChassisHTML(data: any) {
           </table>
         </div>
 
-        ${
-          footerImage
-            ? `
+        ${footerImage ? `
         <div class="footer-image-frame">
           <img src="${footerImage}" />
         </div>
-        `
-            : ""
-        }
-
+        ` : ""}
       </div>
-
     </body>
   </html>
   `;
@@ -1094,7 +1049,7 @@ export function generateEquipmentHTML(data: any) {
         .join("")
     : "<div>Tidak ada sparepart</div>";
 
-  const galleryImages = data.images;
+  const galleryImages = data.images.slice(0, 3);
   const footerImage = data.asset_image_url;
 
   return `
@@ -1114,9 +1069,6 @@ export function generateEquipmentHTML(data: any) {
           margin: 0 auto;
         }
 
-        /* ======================= */
-        /*  TABLE-CLEAN (NO BORDER) */
-        /* ======================= */
         .table-clean {
           width: 100%;
           border-collapse: collapse;
@@ -1124,14 +1076,14 @@ export function generateEquipmentHTML(data: any) {
 
         .table-clean td {
           border: none !important;
-          padding: 3px 0;
-          font-size: 12px;
+          padding: 2px 0;
+          font-size: 10px;
         }
 
         .table-clean td.label {
-          width: 180px;
+          width: 140px;
           text-align: left;
-          padding-right: 10px;
+          padding-right: 5px;
           white-space: nowrap;
         }
 
@@ -1145,13 +1097,8 @@ export function generateEquipmentHTML(data: any) {
           text-align: left;
         }
 
-        /* Utility Classes */
         .bold { font-weight: bold; }
-        .center { text-align: center; }
-        .uppercase { text-transform: uppercase; }
-        .w-100 { width: 100%; }
         
-        /* Table Styles */
         table {
           width: 100%;
           border-collapse: collapse;
@@ -1159,29 +1106,27 @@ export function generateEquipmentHTML(data: any) {
         }
         td, th {
           border: 1px solid black;
-          padding: 4px 6px;
+          padding: 4px 2px;
           vertical-align: top;
+          font-size: 10px;
         }
 
-        /* Header Specifics */
         .header-table td { padding: 0; border: 1px solid black; }
         .logo-cell { width: 100px; text-align: center; vertical-align: middle; padding: 5px; }
         .title-cell { text-align: center; vertical-align: middle; }
         .meta-table { width: 100%; border: none; margin: 0; }
-        .meta-table td { border: none; border-bottom: 1px solid black; border-left: 1px solid black; padding: 2px 5px; }
+        .meta-table td { border: none; border-bottom: 1px solid black; border-left: 1px solid black; padding: 2px 2px; font-size: 10px; }
         .meta-table tr:last-child td { border-bottom: none; }
 
-        /* Main Title */
         h1.main-title {
           text-align: center;
           text-decoration: underline;
-          font-size: 16px;
+          font-size: 14px;
           font-weight: bold;
-          margin: 15px 0;
+          margin: 12px 0;
           text-transform: uppercase;
         }
 
-        /* Sections */
         .section-box {
           border: 1px solid black;
           margin-bottom: -1px;
@@ -1195,20 +1140,18 @@ export function generateEquipmentHTML(data: any) {
           display: inline-block;
         }
 
-        /* Lists */
         ol, ul { margin: 5px 0 5px 20px; padding: 0; }
         li { margin-bottom: 2px; }
 
-        /* Image Gallery */
         .date-badge {
           background: linear-gradient(to bottom, #e0e0e0, #bdbdbd);
           border: 1px solid black;
-          padding: 5px 20px;
+          padding: 5px 16px;
           font-weight: bold;
-          font-size: 14px;
+          font-size: 12px;
           text-align: center;
           width: fit-content;
-          margin: 10px auto;
+          margin: 8px auto;
           box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
           border-radius: 4px;
         }
@@ -1238,7 +1181,6 @@ export function generateEquipmentHTML(data: any) {
             object-fit: cover;
         }
 
-        /* Footer / Signatures */
         .footer-container {
           display: flex;
           justify-content: space-between;
@@ -1268,8 +1210,8 @@ export function generateEquipmentHTML(data: any) {
         .footer-image-frame {
            border: 4px solid #FFD700;
            box-shadow: 3px 3px 5px rgba(0,0,0,0.4);
-           width: 180px;
-           height: 220px;
+           width: 160px;
+           height: 200px;
            overflow: hidden;
         }
         
@@ -1292,14 +1234,14 @@ export function generateEquipmentHTML(data: any) {
           
           <td class="title-cell">
             <div style="font-size: 14px; font-weight: bold;">PT.ADITYA ANDHIKA UTAMA</div>
-            <div style="font-size: 16px; font-weight: bold; margin-top: 5px;">LAPORAN KEGIATAN</div>
+            <div style="font-size: 14px; font-weight: bold; margin-top: 5px;">LAPORAN KEGIATAN</div>
           </td>
 
           <td style="width: 250px; padding:0;">
             <table class="meta-table">
               <tr>
                 <td width="100">No. Dokumen</td>
-                <td>: ${data.id}</td>
+                <td>: ${data.record_number || "-"}</td>
               </tr>
               <tr>
                 <td>Tanggal Kegiatan</td>
@@ -1325,7 +1267,7 @@ export function generateEquipmentHTML(data: any) {
               </tr>
               <tr>
                 <td>Halaman</td>
-                <td>: </td>
+                <td>: 1</td>
               </tr>
             </table>
           </td>
@@ -1336,15 +1278,13 @@ export function generateEquipmentHTML(data: any) {
 
       <div style="border: 1px solid black;">
 
-        <!-- =========================== -->
-        <!-- A. TUJUAN -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
           <span class="section-header">A. Tujuan Kegiatan :</span>
-          <div>
+          <div style="font-size: 10px; margin-bottom: 5px;">
             Untuk menjaga performa dan keamanan equipment agar tetap optimal. Berikut adalah beberapa tujuan spesifik dari kegiatan service equipment:
           </div>
-          <ol>
+          
+          <ol style="column-count: 2; column-gap: 20px; margin: 0 0 5px 20px; font-size: 10px;">
             <li><span class="bold">Memperpanjang Umur Pakai Equipment</span></li>
             <li><span class="bold">Mengoptimalkan Performa Equipment</span></li>
             <li><span class="bold">Mencegah Kerusakan yang Lebih Parah</span></li>
@@ -1352,159 +1292,132 @@ export function generateEquipmentHTML(data: any) {
             <li><span class="bold">Menghemat Biaya Operasional</span></li>
             <li><span class="bold">Memenuhi Kewajiban Garansi</span></li>
           </ol>
-          <div>
-            Dengan melakukan service equipment secara berkala, pengguna dapat menikmati equipment yang aman dalam jangka panjang.
-          </div>
         </div>
 
-        <!-- =========================== -->
-        <!-- B. PENANGGUNG JAWAB -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
           <span class="section-header">B. Penanggung Jawab Kegiatan :</span>
-          <ul>
+          <ul style="font-size: 10px; margin: 0 0 5px 20px; padding: 0;">
             <li>Petugas Safety</li>
             <li>TEAM Mekanik PT.HARTONO MOTOR</li>
             <li>Direktur & Koordinator Safety</li>
           </ul>
         </div>
 
-        <!-- =========================== -->
-        <!-- C. PPE -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
           <span class="section-header">C. Peralatan Pelindung Diri (PPE) :</span>
-          <div>APD</div>
+          <div style="font-size: 10px;">APD</div>
         </div>
 
-        <!-- =========================== -->
-        <!-- D. DATA Chassis (REVISED) -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
-            <span class="section-header">D. Data Chassis :</span>
-
-            <table class="table-clean">
-                <tr>
-                    <td class="label">Nama Equipment</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.name}</td>
-                </tr>
-                <tr>
-                    <td class="label">Kode Equipment</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.equipment?.equipment_code}</td>
-                </tr>
-                <tr>
-                    <td class="label">Jenis Equipment</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.equipment?.equipment_type}</td>
-                </tr>
-                <tr>
-                    <td class="label">Spesifikasi</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.equipment?.specification}</td>
-                </tr>
-                 <tr>
-                    <td class="label">Kondisi</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.asset?.equipment?.condition}</td>
-                </tr>
-            </table>
+           <div style="display: flex; gap: 24px; align-items: flex-start;">
+              <div style="flex: 1;">
+                <span class="section-header">D. Data Equipment :</span>
+                <table class="table-clean">
+                    <tr>
+                        <td class="label">Nama Equipment</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.name}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Kode Equipment</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.equipment?.equipment_code}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Jenis Equipment</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.equipment?.equipment_type}</td>
+                    </tr>
+                </table>
+              </div>
+              <div style="flex: 1;">
+                <table class="table-clean" style="margin-top: 18px;">
+                    <tr>
+                        <td class="label">Spesifikasi</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.equipment?.specification || "-"}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Kondisi</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.equipment?.condition || "-"}</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Catatan Asset</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.notes || "-"}</td>
+                    </tr>
+                </table>
+              </div>
+           </div>
         </div>
 
-        <!-- =========================== -->
-        <!-- E. DATA DRIVER (REVISED) -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black;">
-            <span class="section-header">E. Data Driver :</span>
+          <div style="display: flex; gap: 24px; align-items: flex-start;">
+            <div style="flex: 1;">
+              <span class="section-header">E. Data Driver :</span>
+              <table class="table-clean">
+                <tr>
+                  <td class="label">Nomor Driver</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.driver?.driver_number || "-"}</td>
+                </tr>
+                <tr>
+                  <td class="label">Nama Driver</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.driver?.name || "-"}</td>
+                </tr>
+                <tr>
+                  <td class="label">Nomor HP</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.driver?.phone || "-"}</td>
+                </tr>
+              </table>
+            </div>
 
-            <table class="table-clean">
+            <div style="flex: 1;">
+              <span class="section-header">F. Kegiatan :</span>
+              <table class="table-clean">
                 <tr>
-                    <td class="label">Nomor Driver</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.driver?.driver_number}</td>
+                  <td class="label">Keluhan</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.complaint || "-"}</td>
                 </tr>
                 <tr>
-                    <td class="label">Nama Driver</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.driver?.name}</td>
+                  <td class="label">Catatan Perbaikan</td>
+                  <td class="separator">:</td>
+                  <td class="value">${data.repair_notes || "-"}</td>
                 </tr>
                 <tr>
-                    <td class="label">Nomor HP</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.driver?.phone}</td>
+                  <td class="label">Sparepart</td>
+                  <td class="separator">:</td>
+                  <td class="value">${sparepartsHTML}</td>
                 </tr>
-            </table>
-        </div>
-
-        <!-- =========================== -->
-        <!-- F. KEGIATAN -->
-        <!-- =========================== -->
-        <div class="section-box" style="border: none; border-bottom: 1px solid black;">
-          <span class="section-header">F. Kegiatan :</span>
-          <div>
-            <table class="table-clean">
-                <tr>
-                    <td class="label">Keluhan</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.complaint}</td>
-                </tr>
-                <tr>
-                    <td class="label">Catatan Perbaikan</td>
-                    <td class="separator">:</td>
-                    <td class="value">${data.repair_notes}</td>
-                </tr>
-                <tr>
-                    <td class="label">Sparepart</td>
-                    <td class="separator">:</td>
-                    <td class="value">${sparepartsHTML}</td>
-                </tr>
-            </table>
+              </table>
+            </div>
           </div>
         </div>
 
-        <!-- =========================== -->
-        <!-- G. DOKUMENTASI -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none; border-bottom: 1px solid black; min-height: 200px;">
           <span class="section-header">G. Dokumentasi Kegiatan:</span>
-          
           <div class="date-badge">${dateString}</div>
-
           <div class="gallery-container">
-            ${galleryImages
-              .map(
-                (img: any) => `
+            ${galleryImages.map((img: any) => `
               <div class="photo-frame">
                 <img src="${img.url}" />
               </div>
-            `
-              )
-              .join("")}
-
-            ${
-              galleryImages.length === 0
-                ? '<div style="padding:20px; text-align:center;">Tidak ada dokumentasi foto</div>'
-                : ""
-            }
+            `).join("")}
+            ${galleryImages.length === 0 ? '<div style="padding:20px; text-align:center;">Tidak ada dokumentasi foto</div>' : ""}
           </div>
         </div>
 
-        <!-- =========================== -->
-        <!-- H. LOKASI -->
-        <!-- =========================== -->
         <div class="section-box" style="border: none;">
           <span class="section-header">H. Lokasi Kegiatan :</span>
-          <div>${data.location ?? "Warehouse PT.AAU"}</div>
+          <div style="font-size: 10px;">${data.location ?? "Warehouse PT.AAU"}</div>
         </div>
-
       </div>
 
-      <!-- =========================== -->
-      <!-- FOOTER (TTD + FOTO) -->
-      <!-- =========================== -->
       <div class="footer-container">
-        
         <div style="flex: 1;">
           <table class="signature-table">
             <thead>
@@ -1518,9 +1431,7 @@ export function generateEquipmentHTML(data: any) {
               <tr>
                 <td class="signature-box">
                   <br><br><br>
-                  <span class="bold" style="text-decoration: underline;">${
-                    data.user?.fullname
-                  }</span><br>
+                  <span class="bold" style="text-decoration: underline;">${data.user?.fullname || "MERCY TEAM"}</span><br>
                   (MERCY TEAM)
                 </td>
                 <td class="signature-box">
@@ -1538,16 +1449,11 @@ export function generateEquipmentHTML(data: any) {
           </table>
         </div>
 
-        ${
-          footerImage
-            ? `
+        ${footerImage ? `
         <div class="footer-image-frame">
           <img src="${footerImage}" />
         </div>
-        `
-            : ""
-        }
-
+        ` : ""}
       </div>
 
     </body>

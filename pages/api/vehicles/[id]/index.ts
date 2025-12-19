@@ -36,7 +36,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
           asset: {
             update: {
               asset_code: body.asset_code,
-              is_active: true,
+              is_active: body.is_active,
               asset_type: "VEHICLE",
               name: body.name,
               brand: body.brand,

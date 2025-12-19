@@ -15,3 +15,14 @@ export const CreateMaintenenceSchma = z.object({
   complaint: z.string(),
   repair_plan: z.string(),
 });
+
+export const UpdateMaintenenceSchema = z.object({
+  asset_id: z.string(),
+  driver_id: z.string().optional(),
+  asset_image_url: z.string(),
+  repair_image_urls: z.array(z.string()),
+  km_asset: z.number().optional(),
+  spareparts: z.array(SparepartItemSchema),
+  complaint: z.string(),
+  repair_plan: z.string(),
+});

@@ -2,7 +2,7 @@
 import { fail, success } from "@/lib/apiResponse";
 import { verifyToken } from "@/lib/auth";
 import prisma from "@/lib/prisma";
-import { UpdateChessisSchema } from "@/schema/chassisSchema";
+import { UpdateChassisSchema } from "@/schema/chassisSchema";
 
 import { NextApiRequest, NextApiResponse } from "next";
 import z from "zod";
@@ -31,14 +31,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         const chassis = await findById(chassisId);
         if (!chassis) return res.status(404).json(fail("Chassis not found"));
 
-        const body = UpdateChessisSchema.parse(req.body);
+        const body = UpdateChassisSchema.parse(req.body);
         const updatedChassis = await prisma.chassis.update({
           where: { id: chassisId },
           data: {
             asset: {
               update: {
                 asset_code: body.asset_code,
-                is_active: true,
+                is_active: body.is_active,
                 asset_type: "CHASSIS",
                 name: body.name,
                 brand: body.brand,

@@ -54,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const browser = await puppeteer.launch({
       headless: true,
-      executablePath: '/usr/bin/google-chrome',
+      // executablePath: '/usr/bin/google-chrome',
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
@@ -68,7 +68,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
 
     const pdfBuffer = await page.pdf({
-      format: "A4",
+      format: "Legal",
       printBackground: true, // Penting agar warna background (kuning/abu) muncul
       margin: {
         top: "10mm",

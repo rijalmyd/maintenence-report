@@ -39,6 +39,7 @@ model User {
   role         Role          @default(USER)
   createdAt    DateTime      @default(now())
   maintenences Maintenence[]
+  is_active    Boolean       @default(true)
 
   @@map("users")
 }
