@@ -149,7 +149,7 @@ const DriverEditDialog: React.FC<Props> = ({ driver }) => {
                               className="w-full justify-between font-normal"
                             >
                               {field.value
-                                ? field.value.toLocaleDateString()
+                                ? new Date(field.value).toLocaleDateString("id-ID")
                                 : "Select date"}
                               <ChevronDownIcon />
                             </Button>
