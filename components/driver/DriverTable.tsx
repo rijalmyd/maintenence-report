@@ -37,6 +37,7 @@ import {
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
 import DriverEditDialog from "./DriverEditForm";
 import { Badge } from "../ui/badge";
+import { formatDateID } from "@/lib/formatDate";
 
 export const columns: ColumnDef<Driver>[] = [
   {
@@ -110,6 +111,29 @@ export const columns: ColumnDef<Driver>[] = [
         </div>
       );
     },
+  },
+  // tambahkan pilhan ascending dan descending pada kolom tanggal kadaluarsa sim
+
+  {
+    accessorKey: "sim_due_date",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Tanggal Kadaluarsa SIM
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="capitalize">
+        {row.getValue("sim_due_date")
+          ? formatDateID(new Date(row.getValue("sim_due_date") as string))
+          : "-"}
+      </div>
+    ),
   },
   {
     accessorKey: "notes",

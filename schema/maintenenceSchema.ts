@@ -14,6 +14,7 @@ export const CreateMaintenenceSchma = z.object({
   spareparts: z.array(SparepartItemSchema),
   complaint: z.string(),
   repair_plan: z.string(),
+  location: z.string().optional(),
 });
 
 export const UpdateMaintenenceSchema = z.object({
@@ -25,4 +26,5 @@ export const UpdateMaintenenceSchema = z.object({
   spareparts: z.array(SparepartItemSchema),
   complaint: z.string(),
   repair_plan: z.string(),
+  location: z.string().optional(),
 });

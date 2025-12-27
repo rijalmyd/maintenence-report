@@ -53,6 +53,7 @@ async function handleCreateDriver(
           name: body.name,
           phone: body.phone,
           notes: body.notes,
+          sim_due_date: body.sim_due_date,
           is_active: true,
         },
       });

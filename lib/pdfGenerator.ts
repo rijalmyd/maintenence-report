@@ -1,4 +1,6 @@
-export function generateVehicleHTML(data: any) {
+import { formatDateID } from "./formatDate";
+
+export function generateVehicleHTML(data: any, user: any) {
   // Format Tanggal Indonesia (misal: RABU, 29 OKTOBER 2025)
   const dateObj = new Date(data.createdAt);
   const dateString = dateObj.toLocaleDateString("id-ID", {
@@ -327,7 +329,7 @@ export function generateVehicleHTML(data: any) {
           <span class="section-header">B. Penanggung Jawab Kegiatan :</span>
           <ul style="font-size: 10px; margin: 0 0 5px 20px; padding: 0;">
             <li>Petugas Safety</li>
-            <li>TEAM Mekanik PT.HARTONO MOTOR</li>
+            <li>TEAM Mekanik</li>
             <li>Direktur & Koordinator Safety</li>
           </ul>
         </div>
@@ -349,12 +351,7 @@ export function generateVehicleHTML(data: any) {
                 <span class="section-header">D. Data Kendaraan :</span>
                 <table class="table-clean">
                     <tr>
-                        <td class="label">Nama Kendaraan</td>
-                        <td class="separator">:</td>
-                        <td class="value">${data.asset?.name}</td>
-                    </tr>
-                    <tr>
-                        <td class="label">Plat Nomor</td>
+                        <td class="label">Nomor Plat</td>
                         <td class="separator">:</td>
                         <td class="value">${data.asset?.vehicle?.license_plate}</td>
                     </tr>
@@ -362,6 +359,11 @@ export function generateVehicleHTML(data: any) {
                         <td class="label">Kilometer</td>
                         <td class="separator">:</td>
                         <td class="value">${data.km_asset} KM</td>
+                    </tr>
+                    <tr>
+                        <td class="label">Nomor Rangka</td>
+                        <td class="separator">:</td>
+                        <td class="value">${data.asset?.vehicle?.frame_number}</td>
                     </tr>
                     <tr>
                         <td class="label">Nomor Mesin</td>
@@ -374,19 +376,14 @@ export function generateVehicleHTML(data: any) {
               <span class="section-header"></span>
               <table class="table-clean">
                   <tr>
-                      <td class="label">Nomor Rangka</td>
+                      <td class="label">Tanggal Akhir STNK</td>
                       <td class="separator">:</td>
-                      <td class="value">${data.asset?.vehicle?.frame_number}</td>
+                      <td class="value">${stnkShortDate}</td>
                   </tr>
                   <tr>
                       <td class="label">Tanggal Akhir KIR</td>
                       <td class="separator">:</td>
                       <td class="value">${kirShortDate}</td>
-                  </tr>
-                  <tr>
-                      <td class="label">Tanggal Akhir STNK</td>
-                      <td class="separator">:</td>
-                      <td class="value">${stnkShortDate}</td>
                   </tr>
                   <tr>
                       <td class="label">Catatan</td>
@@ -423,6 +420,11 @@ export function generateVehicleHTML(data: any) {
                   <td class="separator">:</td>
                   <td class="value">${data.driver?.phone}</td>
                 </tr>
+                  <tr>
+                  <td class="label">Tanggal Kadaluarsa SIM</td>
+                  <td class="separator">:</td>
+                  <td class="value">${formatDateID(data.driver.sim_due_date) || "-"}</td>
+                </tr>
               </table>
             </div>
 
@@ -441,7 +443,7 @@ export function generateVehicleHTML(data: any) {
                   <td class="value">${data.repair_notes}</td>
                 </tr>
                 <tr>
-                  <td class="label">Sparepart</td>
+                  <td class="label">Spareparts</td>
                   <td class="separator">:</td>
                   <td class="value">${sparepartsHTML}</td>
                 </tr>
@@ -488,7 +490,7 @@ export function generateVehicleHTML(data: any) {
         <!-- =========================== -->
         <div class="section-box" style="border: none;">
           <span class="section-header">H. Lokasi Kegiatan :</span>
-          <div>${data.location ?? "Warehouse PT.AAU"}</div>
+          <div>${data.location ?? "Warehouse"}</div>
         </div>
 
       </div>
@@ -514,12 +516,12 @@ export function generateVehicleHTML(data: any) {
                   <span class="bold" style="text-decoration: underline;">${
                     data.user?.fullname
                   }</span><br>
-                  (MERCY TEAM)
+                  (Mekanik)
                 </td>
                 <td class="signature-box">
                    <br><br><br>
-                  <span class="bold" style="text-decoration: underline;">Andri Kurniawan</span><br>
-                  (Safety Officer)
+                  <span class="bold" style="text-decoration: underline;">${user.fullname}</span><br>
+                  (${user.role})
                 </td>
                 <td class="signature-box">
                    <br><br><br>
@@ -548,7 +550,7 @@ export function generateVehicleHTML(data: any) {
   `;
 }
 
-export function generateChassisHTML(data: any) {
+export function generateChassisHTML(data: any, user: any) {
   // Format Tanggal Indonesia (misal: RABU, 29 OKTOBER 2025)
   const dateObj = new Date(data.createdAt);
   const dateString = dateObj.toLocaleDateString("id-ID", {
@@ -844,7 +846,7 @@ export function generateChassisHTML(data: any) {
           <span class="section-header">B. Penanggung Jawab Kegiatan :</span>
           <ul style="font-size: 10px; margin: 0 0 5px 20px; padding: 0;">
             <li>Petugas Safety</li>
-            <li>TEAM Mekanik PT.HARTONO MOTOR</li>
+            <li>TEAM Mekanik</li>
             <li>Direktur & Koordinator Safety</li>
           </ul>
         </div>
@@ -928,6 +930,11 @@ export function generateChassisHTML(data: any) {
                   <td class="separator">:</td>
                   <td class="value">${data.driver?.phone}</td>
                 </tr>
+                 <tr>
+                  <td class="label">Tanggal Kadaluarsa SIM</td>
+                  <td class="separator">:</td>
+                  <td class="value">${formatDateID(data.driver.sim_due_date) || "-"}</td>
+                </tr>
               </table>
             </div>
 
@@ -969,7 +976,7 @@ export function generateChassisHTML(data: any) {
 
         <div class="section-box" style="border: none;">
           <span class="section-header">H. Lokasi Kegiatan :</span>
-          <div style="font-size: 10px;">${data.location ?? "Warehouse PT.AAU"}</div>
+          <div style="font-size: 10px;">${data.location ?? "Warehouse"}</div>
         </div>
 
       </div>
@@ -989,12 +996,12 @@ export function generateChassisHTML(data: any) {
                 <td class="signature-box">
                   <br><br><br>
                   <span class="bold" style="text-decoration: underline;">${data.user?.fullname}</span><br>
-                  (MERCY TEAM)
+                  (Mekanik)
                 </td>
                 <td class="signature-box">
                    <br><br><br>
-                  <span class="bold" style="text-decoration: underline;">Andri Kurniawan</span><br>
-                  (Safety Officer)
+                  <span class="bold" style="text-decoration: underline;">${user.fullname}</span><br>
+                  (${user.role})
                 </td>
                 <td class="signature-box">
                    <br><br><br>
@@ -1017,7 +1024,7 @@ export function generateChassisHTML(data: any) {
   `;
 }
 
-export function generateEquipmentHTML(data: any) {
+export function generateEquipmentHTML(data: any, user: any) {
   // Format Tanggal Indonesia (misal: RABU, 29 OKTOBER 2025)
   const dateObj = new Date(data.createdAt);
   const dateString = dateObj.toLocaleDateString("id-ID", {
@@ -1298,7 +1305,7 @@ export function generateEquipmentHTML(data: any) {
           <span class="section-header">B. Penanggung Jawab Kegiatan :</span>
           <ul style="font-size: 10px; margin: 0 0 5px 20px; padding: 0;">
             <li>Petugas Safety</li>
-            <li>TEAM Mekanik PT.HARTONO MOTOR</li>
+            <li>TEAM Mekanik</li>
             <li>Direktur & Koordinator Safety</li>
           </ul>
         </div>
@@ -1372,6 +1379,11 @@ export function generateEquipmentHTML(data: any) {
                   <td class="separator">:</td>
                   <td class="value">${data.driver?.phone || "-"}</td>
                 </tr>
+                <tr>
+                  <td class="label">Tanggal Kadaluarsa SIM</td>
+                  <td class="separator">:</td>
+                  <td class="value">${formatDateID(data.driver.sim_due_date) || "-"}</td>
+                </tr>
               </table>
             </div>
 
@@ -1413,7 +1425,7 @@ export function generateEquipmentHTML(data: any) {
 
         <div class="section-box" style="border: none;">
           <span class="section-header">H. Lokasi Kegiatan :</span>
-          <div style="font-size: 10px;">${data.location ?? "Warehouse PT.AAU"}</div>
+          <div style="font-size: 10px;">${data.location ?? "Warehouse"}</div>
         </div>
       </div>
 
@@ -1431,13 +1443,13 @@ export function generateEquipmentHTML(data: any) {
               <tr>
                 <td class="signature-box">
                   <br><br><br>
-                  <span class="bold" style="text-decoration: underline;">${data.user?.fullname || "MERCY TEAM"}</span><br>
-                  (MERCY TEAM)
+                  <span class="bold" style="text-decoration: underline;">${data.user?.fullname || "Mekanik"}</span><br>
+                  (Mekanik)
                 </td>
                 <td class="signature-box">
                    <br><br><br>
-                  <span class="bold" style="text-decoration: underline;">Andri Kurniawan</span><br>
-                  (Safety Officer)
+                  <span class="bold" style="text-decoration: underline;">${user.fullname}</span><br>
+                  (${user.role})
                 </td>
                 <td class="signature-box">
                    <br><br><br>

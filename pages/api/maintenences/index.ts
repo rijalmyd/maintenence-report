@@ -223,6 +223,7 @@ async function handleCreateMaintenance(
         asset_id: body.asset_id,
         driver_id: driver?.id ?? null,
         user_id: decoded.id,
+        location: body.location ?? null,
       },
     });
 
