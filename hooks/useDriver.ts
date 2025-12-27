@@ -1,7 +1,7 @@
 import { Driver } from "@/generated/prisma/client";
 import { handleApiError } from "@/lib/errorHandler";
 import api from "@/lib/fetcher";
-import { CreateDriverSchema } from "@/schema/driverSchema";
+import { CreateDriverSchema, UpdateDriverSchema } from "@/schema/driverSchema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import z from "zod";
@@ -55,7 +55,7 @@ export const useDeleteDriver = () => {
 export const useUpdateDriver = (driverId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async (data: Partial<z.infer<typeof CreateDriverSchema>>) => {
+    mutationFn: async (data: Partial<z.infer<typeof UpdateDriverSchema>>) => {
       const res = await api.patch(`/drivers/${driverId}`, data);
       return res.data;
     },

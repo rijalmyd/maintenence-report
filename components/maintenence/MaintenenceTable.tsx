@@ -317,17 +317,47 @@ const DeleteMaintenance = ({ maintenanceId }: { maintenanceId: string }) => {
   );
 };
 
+// add authorization header to fetch request and open in new browser tab
 const DownloadMaintenancePDF = ({
   maintenanceId,
 }: {
   maintenanceId: string;
 }) => {
+  // const handleDownload = () => {
+  //   // open PDF in new tab or force download
+  //   window.open(
+  //     `/api/maintenences/pdf?id=${maintenanceId}`,
+  //     "_blank"
+  //   );
+  // };
   const handleDownload = () => {
-    // open PDF in new tab or force download
-    window.open(
-      `/api/maintenences/pdf?id=${maintenanceId}`,
-      "_blank"
-    );
+    const authToken = localStorage.getItem("token"); // Adjust based on how you store the token
+
+    fetch(`/api/maintenences/pdf?id=${maintenanceId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        // Create a URL for the blob
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", `maintenance_${maintenanceId}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode?.removeChild(link);
+      })
+      .catch((error) => {
+        console.error("There was a problem with the fetch operation:", error);
+      });
   };
 
   return (

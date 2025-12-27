@@ -4,6 +4,8 @@ import puppeteer from "puppeteer";
 import { generateVehicleHTML } from "@/lib/pdfGenerator";
 import { generateChassisHTML } from "@/lib/pdfGenerator";
 import { generateEquipmentHTML } from "@/lib/pdfGenerator"; 
+import { fail } from "@/lib/apiResponse";
+import jwt from "jsonwebtoken";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -25,6 +27,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
+    const authHeader = req.headers.authorization;
+    if (!authHeader?.startsWith("Bearer "))
+        return res.status(401).json(fail("unauthorized"));
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      id: string;
+      username: string;
+    };
+
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.id },
+    });
+    console.log("Generating PDF for maintenance ID:", id, "by user:", user);
+
     if (!getMaintenance) return res.status(404).json({ error: "data not found" });
 
     // Transform data images
@@ -37,15 +53,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     switch (result.asset?.asset_type) {
     case "VEHICLE":
-        html = generateVehicleHTML(result);
+        html = generateVehicleHTML(result, user);
         break;
 
     case "CHASSIS":
-        html = generateChassisHTML(result);
+        html = generateChassisHTML(result, user);
         break;
 
     case "EQUIPMENT":
-        html = generateEquipmentHTML(result);
+        html = generateEquipmentHTML(result, user);
         break;
 
     default:
@@ -54,7 +70,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const browser = await puppeteer.launch({
       headless: true,
-      executablePath: '/usr/bin/google-chrome',
+      // disable if running locally
+      executablePath: process.env.NODE_ENV === "production" ? "/usr/bin/chromium-browser" : undefined,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
