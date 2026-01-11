@@ -9,7 +9,7 @@ export const CreateVehicleSchema = z.object({
   license_plate: z.string().optional(),
   vehicle_type: z.string().optional(),
   color: z.string().optional(),
-  year: z.number().optional(),
+  year: z.number().int().optional(),
   engine_number: z.string().optional(),
   frame_number: z.string().optional(),
   no_kir: z.string(),

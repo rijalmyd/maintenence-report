@@ -16,10 +16,11 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import { useCreateVehicle } from "@/hooks/useVehicle";
+import { formatDate, parseDate } from "@/lib/formatDate";
 import { CreateAssetSchema } from "@/schema/assetSchema";
 import { CreateVehicleSchema } from "@/schema/vehicleSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChevronDownIcon, Loader2Icon } from "lucide-react";
+import { CalendarIcon, ChevronDownIcon, Loader2Icon } from "lucide-react";
 import { Resolver, useForm } from "react-hook-form";
 import z from "zod";
 
@@ -44,7 +45,7 @@ const VehicleForm: React.FC<Props> = ({ asset, onPrevius }) => {
       notes: "",
       stnk_due_date: undefined,
       vehicle_type: "",
-      year: 2025,
+      year: undefined,
     },
   });
 
@@ -122,37 +123,77 @@ const VehicleForm: React.FC<Props> = ({ asset, onPrevius }) => {
             control={form.control}
             name="stnk_due_date"
             render={({ field }) => (
+              // <FormItem>
+              //   <FormLabel>STNK Jatuh tempo</FormLabel>
+              //   <FormControl>
+              //     <Popover>
+              //       <PopoverTrigger asChild>
+              //         <Button
+              //           variant="outline"
+              //           id="date"
+              //           className="w-full justify-between font-normal"
+              //         >
+              //           {field.value
+              //             ? field.value.toLocaleDateString()
+              //             : "Select date"}
+              //           <ChevronDownIcon />
+              //         </Button>
+              //       </PopoverTrigger>
+              //       <PopoverContent
+              //         className="w-auto overflow-hidden p-0"
+              //         align="start"
+              //       >
+              //         <Calendar
+              //           mode="single"
+              //           selected={field.value ?? undefined}
+              //           onSelect={(date) => field.onChange(date ?? undefined)}
+              //           captionLayout="dropdown"
+              //         />
+              //       </PopoverContent>
+              //     </Popover>
+              //   </FormControl>
+              //   <FormMessage />
+              // </FormItem>
               <FormItem>
-                <FormLabel>STNK Jatuh tempo</FormLabel>
-                <FormControl>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        id="date"
-                        className="w-full justify-between font-normal"
-                      >
-                        {field.value
-                          ? field.value.toLocaleDateString()
-                          : "Select date"}
-                        <ChevronDownIcon />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-auto overflow-hidden p-0"
-                      align="start"
-                    >
-                      <Calendar
-                        mode="single"
-                        selected={field.value ?? undefined}
-                        onSelect={(date) => field.onChange(date ?? undefined)}
-                        captionLayout="dropdown"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                    <FormLabel>STNK Jatuh Tempo</FormLabel>
+
+                    <div className="flex gap-2">
+                      {/* INPUT MANUAL */}
+                      <FormControl>
+                        <Input
+                          placeholder="DD/MM/YYYY"
+                          value={formatDate(field.value)}
+                          disabled
+                          onChange={(e) => {
+                            const parsed = parseDate(e.target.value);
+                            field.onChange(parsed);
+                          }}
+                        />
+                      </FormControl>
+
+                      {/* DATE PICKER */}
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="outline" size="icon">
+                            <CalendarIcon className="h-4 w-4" />
+                          </Button>
+                        </PopoverTrigger>
+
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={(date) => field.onChange(date ?? undefined)}
+                            captionLayout="dropdown"   // 🔥 bulan & tahun dropdown
+                            fromYear={1990}
+                            toYear={2100}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+
+                    <FormMessage />
+                  </FormItem>
             )}
           />
         </div>
@@ -176,36 +217,76 @@ const VehicleForm: React.FC<Props> = ({ asset, onPrevius }) => {
             control={form.control}
             name="kir_due_date"
             render={({ field }) => (
+              // <FormItem>
+              //   <FormLabel>KIR Jatuh tempo</FormLabel>
+              //   <FormControl>
+              //     <Popover>
+              //       <PopoverTrigger asChild>
+              //         <Button
+              //           variant="outline"
+              //           id="date"
+              //           className="w-full justify-between font-normal"
+              //         >
+              //           {field.value
+              //             ? field.value.toLocaleDateString()
+              //             : "Select date"}
+              //           <ChevronDownIcon />
+              //         </Button>
+              //       </PopoverTrigger>
+              //       <PopoverContent
+              //         className="w-auto overflow-hidden p-0"
+              //         align="start"
+              //       >
+              //         <Calendar
+              //           mode="single"
+              //           selected={field.value ?? undefined}
+              //           onSelect={(date) => field.onChange(date ?? undefined)}
+              //         />
+              //       </PopoverContent>
+              //     </Popover>
+              //   </FormControl>
+              //   <FormMessage />
+              // </FormItem>
               <FormItem>
-                <FormLabel>KIR Jatuh tempo</FormLabel>
-                <FormControl>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        id="date"
-                        className="w-full justify-between font-normal"
-                      >
-                        {field.value
-                          ? field.value.toLocaleDateString()
-                          : "Select date"}
-                        <ChevronDownIcon />
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent
-                      className="w-auto overflow-hidden p-0"
-                      align="start"
-                    >
-                      <Calendar
-                        mode="single"
-                        selected={field.value ?? undefined}
-                        onSelect={(date) => field.onChange(date ?? undefined)}
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+                    <FormLabel>KIR Jatuh Tempo</FormLabel>
+
+                    <div className="flex gap-2">
+                      {/* INPUT MANUAL */}
+                      <FormControl>
+                        <Input
+                          placeholder="DD/MM/YYYY"
+                          value={formatDate(field.value)}
+                          disabled
+                          onChange={(e) => {
+                            const parsed = parseDate(e.target.value);
+                            field.onChange(parsed);
+                          }}
+                        />
+                      </FormControl>
+
+                      {/* DATE PICKER */}
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button variant="outline" size="icon">
+                            <CalendarIcon className="h-4 w-4" />
+                          </Button>
+                        </PopoverTrigger>
+
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={(date) => field.onChange(date ?? undefined)}
+                            captionLayout="dropdown"   // 🔥 bulan & tahun dropdown
+                            fromYear={1990}
+                            toYear={2100}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+
+                    <FormMessage />
+                  </FormItem>
             )}
           />
         </div>
@@ -215,9 +296,9 @@ const VehicleForm: React.FC<Props> = ({ asset, onPrevius }) => {
             name="vehicle_type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tipe Kendarran</FormLabel>
+                <FormLabel>Tipe Kendaraan</FormLabel>
                 <FormControl>
-                  <Input placeholder="contoh: AST-XXX" {...field} />
+                  <Input placeholder="contoh: Truk" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -232,8 +313,15 @@ const VehicleForm: React.FC<Props> = ({ asset, onPrevius }) => {
                 <FormControl>
                   <Input
                     type="number"
-                    placeholder="contoh: AST-XXX"
-                    {...field}
+                    placeholder="contoh: 2020"
+                    value={field.value ?? ""}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value === ""
+                          ? undefined
+                          : e.target.valueAsNumber
+                      )
+                    }
                   />
                 </FormControl>
                 <FormMessage />
