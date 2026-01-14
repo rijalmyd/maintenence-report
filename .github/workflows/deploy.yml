@@ -40,5 +40,5 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            sudo -S /root/deploy.sh <<< "@AAUservice25"
+            sudo /root/deploy.sh
 
