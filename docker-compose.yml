@@ -1,37 +1,74 @@
+# services:
+#   app:
+#     build: .
+#     container_name: nextjs-app
+#     ports:
+#       - "3000:3000"
+#     environment:
+#       DATABASE_URL: mysql://appuser:apppass@mysql:3306/appdb
+#       JWT_SECRET: supersecretkey # ubah jadi rahasia sendiri
+#       BASE_URL: http://localhost:3000
+#     volumes:
+#       - ./storage/uploads:/app/storage/uploads
+#     depends_on:
+#       - mysql
+#     networks:
+#       - app-network # ⬅️ Tambahkan network
+
+#   mysql:
+#     image: mysql:8.0.36 # ✅ Versi stabil & kompatibel untuk CPU lama
+#     restart: always
+#     environment:
+#       MYSQL_ROOT_PASSWORD: root
+#       MYSQL_DATABASE: appdb
+#       MYSQL_USER: appuser
+#       MYSQL_PASSWORD: apppass
+#     ports:
+#       - "3307:3306"
+#     volumes:
+#       - mysql_data:/var/lib/mysql
+#     networks:
+#       - app-network # ⬅️ Tambahkan network juga
+# volumes:
+#   mysql_data:
+
+# networks:
+#   app-network: # ⬅️ Definisi network
+#     driver: bridge
 services:
   app:
-    build: .
+    image: ghcr.io/rijalmyd/maintenence-report:latest
     container_name: nextjs-app
+    restart: always
     ports:
       - "3000:3000"
     environment:
       DATABASE_URL: mysql://appuser:apppass@mysql:3306/appdb
-      JWT_SECRET: supersecretkey # ubah jadi rahasia sendiri
+      JWT_SECRET: supersecretkey
       BASE_URL: http://localhost:3000
     volumes:
       - ./storage/uploads:/app/storage/uploads
     depends_on:
       - mysql
     networks:
-      - app-network # ⬅️ Tambahkan network
+      - app-network
 
   mysql:
-    image: mysql:8.0.36 # ✅ Versi stabil & kompatibel untuk CPU lama
+    image: mysql:8.0.36
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: appdb
       MYSQL_USER: appuser
       MYSQL_PASSWORD: apppass
-    ports:
-      - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
     networks:
-      - app-network # ⬅️ Tambahkan network juga
+      - app-network
+
 volumes:
   mysql_data:
 
 networks:
-  app-network: # ⬅️ Definisi network
+  app-network:
     driver: bridge
