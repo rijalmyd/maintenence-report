@@ -1,6 +1,6 @@
 import { Prisma } from "@/generated/prisma/client";
 import api from "@/lib/fetcher";
-import { CreateChessisSchema, UpdateChassisSchema } from "@/schema/chassisSchema";
+import { CreateChessisSchema, DeleteChassisBulkSchema, UpdateChassisSchema } from "@/schema/chassisSchema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
@@ -31,7 +31,7 @@ export const useCreateChassis = () => {
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["chassises"] });
+      queryClient.invalidateQueries({ queryKey: ["chassises"], exact: false });
       toast.success("Asset created successfully");
       router.push("/admin/assets?asset=chassis");
       setTimeout(() => {
@@ -53,7 +53,7 @@ export const useDeleteChassis = () => {
       return res.data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["chassises"] });
+      queryClient.invalidateQueries({ queryKey: ["chassises"], exact: false });
       toast.success("Chassis deleted successfully");
       router.push("/admin/assets?asset=chassis");
       setTimeout(() => {
@@ -77,13 +77,56 @@ export const useUpdateChassis = (chassisId: string) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["chassises"] });
       toast.success("Chassis updated successfully");
-      router.push("/admin/assets?asset=chassis");
+        setTimeout(() => {
+        router.reload();
+      }, 1000);
+    },
+    onError: () => {
+      toast.error("Failed to update Chassis");
+    },
+  });
+};
+
+// bulk create chassis
+export const useBulkCreateChassis = () => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: z.infer<typeof CreateChessisSchema>[]) => {
+      const res = await api.post(`/chassises/bulk`, data);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["chassises"], exact: false });
+      toast.success("Chassises created successfully");
+        setTimeout(() => {
+        router.reload();
+      }, 1000);
+    },
+    onError: () => {
+      toast.error("Failed to create Chassises");
+    },
+  });
+};  
+
+// bulk delete chassis
+export const useBulkDeleteChassis = () => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (data: z.infer<typeof DeleteChassisBulkSchema>) => {
+      const res = await api.post(`/chassises/bulk-delete`, data);
+      return res.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["chassises"], exact: false });
+      toast.success("Chassises deleted successfully");
       setTimeout(() => {
         router.reload();
       }, 1000); 
     },
     onError: () => {
-      toast.error("Failed to update Chassis");
+      toast.error("Failed to delete Chassises");
     },
   });
 };

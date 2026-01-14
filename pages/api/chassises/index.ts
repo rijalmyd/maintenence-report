@@ -65,8 +65,10 @@ async function handleCreateChassis(
               serrial_number: body.asset.serial_number,
             },
           },
-
-          chassis_number: chassisNumber,
+          owner: body.owner,
+          address: body.address,
+          color: body.color,
+          chassis_number: body.asset.name,
           chassis_type: body.chassis_type,
           axle_count: body.axle_count,
           chassis_category: body.chassis_category,

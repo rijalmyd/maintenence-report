@@ -30,6 +30,7 @@ enum AssetType {
 enum ChassisType {
   RANGKA
   FLATBED
+  DECK_KAYU
 }
 
 model User {
@@ -106,6 +107,9 @@ model Chassis {
   no_kir           String?
   kir_due_date     DateTime?
   notes            String?
+  color            String?
+  owner            String?
+  address          String?
   createdAt        DateTime    @default(now())
   asset_id         String      @unique @db.Char(36)
   asset            Asset       @relation(fields: [asset_id], references: [id])

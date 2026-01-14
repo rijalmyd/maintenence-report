@@ -41,11 +41,13 @@ interface Props {
   defaultValues: z.infer<typeof UpdateChassisSchema>;
 }
 
-const chassisType: string[] = ["FLATBED", "RANGKA"];
+const chassisType: string[] = ["FLATBED", "RANGKA", "DECK_KAYU"];
 const categoryChassis: string[] = [
   "20 feet",
-  "40 feet Lowbed",
+  "40 feet",
+  "Lowbed",
   "Dolly",
+  "Sliding",
   "Lainya",
 ];
 
@@ -62,7 +64,6 @@ const ChassisEditForm: React.FC<Props> = ({
     defaultValues,
   });
 
-  /** 🔴 WAJIB biar default value ke-load saat dialog dibuka */
   useEffect(() => {
     if (open) {
       form.reset(defaultValues);
@@ -195,52 +196,68 @@ const ChassisEditForm: React.FC<Props> = ({
               />
             </div>
 
-            <FormField
-              control={form.control}
-              name="purchase_date"
-              render={({ field }) => (
-                 <FormItem>
-                    <FormLabel>Tanggal Pembelian</FormLabel>
+            <div className="grid grid-cols-2 gap-4">  
+              <FormField
+                control={form.control}
+                name="purchase_date"
+                render={({ field }) => (
+                  <FormItem>
+                      <FormLabel>Tanggal Pembelian</FormLabel>
 
-                    <div className="flex gap-2">
-                      {/* INPUT MANUAL */}
-                      <FormControl>
-                        <Input
-                          placeholder="DD/MM/YYYY"
-                          value={formatDate(field.value)}
-                          disabled
-                          onChange={(e) => {
-                            const parsed = parseDate(e.target.value);
-                            field.onChange(parsed);
-                          }}
-                        />
-                      </FormControl>
-
-                      {/* DATE PICKER */}
-                      <Popover>
-                        <PopoverTrigger asChild>
-                          <Button variant="outline" size="icon">
-                            <CalendarIcon className="h-4 w-4" />
-                          </Button>
-                        </PopoverTrigger>
-
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={(date) => field.onChange(date ?? undefined)}
-                            captionLayout="dropdown"   // 🔥 bulan & tahun dropdown
-                            fromYear={1990}
-                            toYear={2100}
+                      <div className="flex gap-2">
+                        {/* INPUT MANUAL */}
+                        <FormControl>
+                          <Input
+                            placeholder="DD/MM/YYYY"
+                            value={formatDate(field.value)}
+                            disabled
+                            onChange={(e) => {
+                              const parsed = parseDate(e.target.value);
+                              field.onChange(parsed);
+                            }}
                           />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
+                        </FormControl>
 
+                        {/* DATE PICKER */}
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button variant="outline" size="icon">
+                              <CalendarIcon className="h-4 w-4" />
+                            </Button>
+                          </PopoverTrigger>
+
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={(date) => field.onChange(date ?? undefined)}
+                              captionLayout="dropdown"   // 🔥 bulan & tahun dropdown
+                              fromYear={1990}
+                              toYear={2100}
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </div>
+
+                      <FormMessage />
+                    </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Warna</FormLabel>
+                    <FormControl>
+                      <Input placeholder="contoh: HITAM" {...field} />
+                    </FormControl>
                     <FormMessage />
                   </FormItem>
-              )}
-            />
+                )}
+              />
+            </div>
 
             <Separator />
 
@@ -340,6 +357,39 @@ const ChassisEditForm: React.FC<Props> = ({
                     </FormItem>
                 )}
                 />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="owner"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Pemilik</FormLabel>
+                        <FormControl>
+                          <Input placeholder="contoh: PT ADITYA ANDHIKA UTAMA" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="address"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Alamat</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="contoh: JL RAYA CAKUNG CILING KM 2 KAV C792, JAKUT" {...field} 
+                            multiple
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+        />
                 </div>
             <div className="grid grid-cols-2 gap-4">
                 <FormField

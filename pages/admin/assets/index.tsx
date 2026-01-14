@@ -1,7 +1,11 @@
-import AssetForm from "@/components/assets/AssetForm";
+
 import ChassisTable from "@/components/assets/chassis/ChassisTable";
 import EquipmentTable from "@/components/assets/equipment/EquipmentTable";
 import VehicleTable from "@/components/assets/vehicle/VehicleTable";
+import DriverForm from "@/components/driver/DriverForm";
+import ChassisImportExcel from "@/components/assets/chassis/ChassisImportExcel";
+import ChassisImportPreviewDialog from "@/components/assets/chassis/ChassisImportPreviewDialog";
+import AssetForm from "@/components/assets/AssetForm";
 import AdminLayout from "@/components/layout/admin";
 import {
   Card,
@@ -13,24 +17,44 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
+import { useState } from "react";
+import { useBulkCreateChassis } from "@/hooks/useChassis";
 
 const AssetPage: React.FC = () => {
   const route = useRouter();
   const searchParam = useSearchParams();
 
+  const chassisBulkMutation = useBulkCreateChassis();
+
+  const [importedData, setImportedData] = useState<any[]>([]);
+  const [previewOpen, setPreviewOpen] = useState(false);
+
+  const handleImport = (data: any[]) => {
+    console.log("Imported Data:", data);
+    setImportedData(data);
+    setPreviewOpen(true);
+  };
+
+  const handleSubmitImport = async () => {
+    chassisBulkMutation.mutate(importedData);
+
+    setPreviewOpen(false);
+    setImportedData([]);
+  };
+
   return (
     <AdminLayout>
-      <div className="grid grid-cols-1 lg:grid-cols-[7fr_1fr] gap-3">
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle>Daftar Aset</CardTitle>
-            <CardAction>
-              <AssetForm />
-            </CardAction>
-          </CardHeader>
+      <Card>
+        <CardHeader>
+          <CardTitle>Daftar Aset</CardTitle>
+          <CardAction className="space-x-2">
+            <ChassisImportExcel onImported={handleImport} />
+            <AssetForm />
+          </CardAction>
+        </CardHeader>
 
-          <CardContent>
-            <Tabs defaultValue={searchParam.get("asset") ?? "vehicle"}>
+        <CardContent>
+          <Tabs defaultValue={searchParam.get("asset") ?? "vehicle"}>
               <TabsList>
                 <TabsTrigger
                   value="vehicle"
@@ -61,9 +85,17 @@ const AssetPage: React.FC = () => {
                 <EquipmentTable />
               </TabsContent>
             </Tabs>
-          </CardContent>
-        </Card>
-      </div>
+          
+        </CardContent>
+      </Card>
+
+      {/* DIALOG PREVIEW */}
+      <ChassisImportPreviewDialog
+        open={previewOpen}
+        data={importedData}
+        onClose={() => setPreviewOpen(false)}
+        onSubmit={handleSubmitImport}
+      />
     </AdminLayout>
   );
 };

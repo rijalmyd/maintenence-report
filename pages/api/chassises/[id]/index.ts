@@ -32,6 +32,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
         if (!chassis) return res.status(404).json(fail("Chassis not found"));
 
         const body = UpdateChassisSchema.parse(req.body);
+
         const updatedChassis = await prisma.chassis.update({
           where: { id: chassisId },
           data: {
@@ -48,7 +49,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
                 serrial_number: body.serial_number,
               },
             },
-
+            owner: body.owner,
+            address: body.address,
+            color: body.color,
             chassis_number: body.chassis_number,
             chassis_type: body.chassis_type,
             axle_count: body.axle_count,
