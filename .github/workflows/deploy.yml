@@ -43,50 +43,91 @@
 #             cd ~
 #             ./deploy.sh
 
-name: Deploy Next Backend
+# name: Deploy Next Backend
+
+# on:
+#   push:
+#     branches: ["main"]
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+
+#       - name: Setup Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 18
+
+#       - name: Install dependencies
+#         run: npm install
+
+#       - name: Build Next.js
+#         run: npm run build
+
+#       - name: Copy files to VPS
+#         uses: appleboy/scp-action@v0.1.7
+#         with:
+#           host: ${{ secrets.VPS_HOST }}
+#           username: ${{ secrets.VPS_USER }}
+#           key: ${{ secrets.VPS_KEY }}
+#           source: ".next,package.json,prisma,api"
+#           target: ${{ secrets.VPS_DIR }}
+#           overwrite: true
+
+#       - name: Restart aaubengkel on VPS
+#         uses: appleboy/ssh-action@v1.0.3
+#         with:
+#           host: ${{ secrets.VPS_HOST }}
+#           username: ${{ secrets.VPS_USER }}
+#           key: ${{ secrets.VPS_KEY }}
+#           script: |
+#             cd ${{ secrets.VPS_DIR }}
+#             npm install --omit=dev
+#             pm2 stop aaubengkel || true
+#             pm2 start npm --name aaubengkel -- run start
+#             pm2 save
+
+name: CI CD Next.js Docker
 
 on:
   push:
     branches: ["main"]
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: write
+
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Login GHCR
+        uses: docker/login-action@v3
         with:
-          node-version: 18
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: npm install
+      - name: Build & Push Image
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}:latest .
+          docker push ghcr.io/${{ github.repository }}:latest
 
-      - name: Build Next.js
-        run: npm run build
-
-      - name: Copy files to VPS
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.VPS_HOST }}
-          username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_KEY }}
-          source: ".next,package.json,prisma,api"
-          target: ${{ secrets.VPS_DIR }}
-          overwrite: true
-
-      - name: Restart aaubengkel on VPS
-        uses: appleboy/ssh-action@v1.0.3
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.VPS_KEY }}
+          key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            cd ${{ secrets.VPS_DIR }}
-            npm install --omit=dev
-            pm2 stop aaubengkel || true
-            pm2 start npm --name aaubengkel -- run start
-            pm2 save
+            cd /home/app
+            docker compose pull
+            docker compose up -d --remove-orphans
+
